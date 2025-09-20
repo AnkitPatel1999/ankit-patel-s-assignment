@@ -37,13 +37,13 @@
 
 .cu-hero-graph-block {}
 
-.doughnut_chart_container{
+.cu-doughnut-chart-container{
     width: 160px;
     height: 160px;
     margin-right: 20px;
 }
 
-.token_name_container {
+.cu-token-name-container {
     flex: 1;
     gap: 16px;
 }
