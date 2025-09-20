@@ -1,0 +1,55 @@
+.cu-hero-container {
+    padding: 24px;
+    border-radius: 12px;
+    gap: 19px;
+    background: var(--neutral-800-color);
+
+}
+
+.cu-hero-common-block {
+    flex: 1;
+}
+
+.cu-hero-total-block {}
+
+.cu-hero-title {
+    line-height: 20px;
+    font-size: var(--fs-lg);
+    color: var(--neutral-400-color);
+    font-weight: var(--fw-500);
+}
+
+.cu-hero-value {
+    color: #F4F4F5;
+    font-size: var(--fs-4xlg);
+    font-weight: var(--fw-500);
+    line-height: 110px;
+}
+
+.cu-hero-last-updated-time{
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-400);
+    color: var(--neutral-400-color);
+    line-height: 20px;
+}
+
+
+
+.cu-hero-graph-block {}
+
+.doughnut_chart_container{
+    width: 160px;
+    height: 160px;
+    margin-right: 20px;
+}
+
+.token_name_container {
+    flex: 1;
+    gap: 16px;
+}
+
+.cu-hero-token-name{
+    font-size: var(--fs-md);
+    font-weight: var(--fw-500);
+    line-height: 20px;
+}
