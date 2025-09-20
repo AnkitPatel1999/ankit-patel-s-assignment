@@ -21,30 +21,37 @@
 
     border-radius: 12px;
     background: #212124;
-    box-shadow: 
-    0px 8px 16px 0px #00000052,
-    0px 4px 8px 0px #00000052,
-    0px 0px 0px 1px #FFFFFF1A,
-    0px -1px 0px 0px #FFFFFF0A,
-    0px 0px 0px 1.5px #FFFFFF0F inset,
-    0px 0px 0px 1px #18181B inset;
+    box-shadow:
+        0px 8px 16px 0px #00000052,
+        0px 4px 8px 0px #00000052,
+        0px 0px 0px 1px #FFFFFF1A,
+        0px -1px 0px 0px #FFFFFF0A,
+        0px 0px 0px 1.5px #FFFFFF0F inset,
+        0px 0px 0px 1px #18181B inset;
 
     width: 640px;
 
 }
 
 .cu-modal-header {
-    padding: 20px 24px 0 24px;
+    padding: 10px;
+    border-bottom: 1px solid var(--borders-border-base, #FFFFFF1A)
+}
+
+.cu-modal-search:focus {
+    outline: none;
 }
 
 .cu-modal-search {
     width: 100%;
-    padding: 10px 16px;
+    padding: 5px 6px;
     border-radius: 8px;
     border: none;
-    background: #181A20;
-    color: #fff;
-    font-size: 16px;
+    background: none;
+    color: #71717A;
+    font-size: var(--fs-md);
+    font-weight: var(--fw-400);
+    line-height: 20px;
     box-sizing: border-box;
 }
 
@@ -55,43 +62,50 @@
 }
 
 .cu-modal-trending {
-    padding: 12px 24px 4px 24px;
-    color: #A1A1AA;
-    font-size: 14px;
+    padding: 12px 16px 0 16px;
+    color: var(--muted-color);
+    font-size: var(--fs-xsm);
+    line-height: 20px;
 }
 
 .cu-modal-token-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 10px 24px;
+    font-size: var(--fs-sm);
+    padding: 6px 16px;
     cursor: pointer;
     transition: background 0.2s;
+    line-height: 20px;
+    font-weight: var(--fw-400);
 }
 
 .cu-modal-token-row:hover,
 .cu-modal-token-row.selected {
-    background: #181A20;
+    color: #bbbbbb;
 }
 
 .cu-modal-token-logo {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 4px;
+    background: var(--backgrounds-bg-base, #212124);
+    box-shadow: 0px 0px 0px 1px #00000014, 0px 1px 2px 0px #0000001F;
+    padding: 2px;
 }
 
 .cu-modal-radio {
     margin-left: auto;
-    width: 18px;
-    height: 18px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     border: 2px solid #A1A1AA;
     background: none;
 }
 
 .cu-modal-footer {
-    padding: 16px 24px;
-    border-top: 1px solid #2A2D34;
+    padding: 12px 16px;
+    border-top: 1px solid #27272A;
     display: flex;
     justify-content: flex-end;
 }
@@ -106,4 +120,37 @@
     font-weight: 500;
     cursor: not-allowed;
     opacity: 0.7;
+}
+
+
+
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+    width: 4px;
+    /* scrollbar width */
+    /* height: 8px;           scrollbar height for horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    /* track color */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    /* scrollbar handle */
+    background: var(--borders-border-base, #FFFFFF1A);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+    /* hover effect */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: initial;
+    /* auto | thin | none */
+    /* scrollbar-color: #555 #1a1a1a;   thumb color | track color */
 }

@@ -16,9 +16,10 @@
   --white-fg-base-color: #F4F4F5;
   --dark-fg-subtle-color: #A1A1AA;
   --dark-fg-disabled-color: #52525B;
-
+  --muted-color: #71717A;
 
   --font-family-inter: 'Inter', sans-serif;
+  --fs-xsm: 12px; /* extra small */
   --fs-sm: 13px; /* small */
   --fs-md: 14px; /* medium */
   --fs-lg: 16px; /* large */
