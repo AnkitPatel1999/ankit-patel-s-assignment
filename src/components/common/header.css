@@ -1,0 +1,10 @@
+.cu-header{
+    padding: 12px;
+}
+
+.cu-header-title {
+    color: var(--white-color);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+}

@@ -1,0 +1,88 @@
+:root {
+  font-family: 'inter', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+
+  --primary-color: #212124;   /* dark */
+  --green-color: #A9E851; /* green */
+
+  --dark-color: #18181B;
+  --white-color: #FFFFFF;
+
+  --fs-sm: 13px; /* small */
+
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+}
+
+
+body {
+  background-color: var(--primary-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* common button classes start*/
+
+.ae-btn {
+  background-color: var(--green-color);
+  border: none;
+  color: var(--dark-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 0px 0.75px 0px 0px #FFFFFF33 inset;
+  border-radius: 100px;
+  padding: 6px 12px;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.ae-btn:hover {
+  /* background-color: darken(var(--green-color), 5%); */
+}
+
+.ae-btn:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+}
+.ae-btn .ae-btn-icon {
+  width: 15px; height: 15px;
+}
+
+.ae-btn .ae-btn-text {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+
+/* common button classes end*/
+
+
+.ae-d-flex {
+  display: flex;
+}
+
+.ae-justify-space-between {
+  justify-content: space-between;
+}
+.ae-align-center {
+  align-items: center;
+}
+
+.ae-gap-10 {
+  gap: 10px;
+}
+
+.ae-gap-5 {
+  gap: 5px;
+}
