@@ -77,15 +77,18 @@ body {
 }
 
 .ae-btn-green{
-  box-shadow: 0px 0px 0px 1px #1F6619;
+  box-shadow: 0px 0px 0px 1px #1F6619,
+  0px 1px 2px 0px #1F661966,
+  0px 0.75px 0px 0px #FFFFFF33 inset;
+
   /* box-shadow: 0px 1px 2px 0px #1F661966; */
   /* box-shadow: 0px 0.75px 0px 0px #FFFFFF33 inset; */
   background: var(--green-color);
 }
 
 .ae-btn-dark{
-    box-shadow: 0px 0px 0px 1px #00000014;
-    box-shadow: 0px 1px 2px 0px #0000001F;
+    box-shadow: 0px 0px 0px 1px #00000014,
+      0px 1px 2px 0px #0000001F;
     background: var(--buttons-button-neutral, #FFFFFF0A);
 }
 

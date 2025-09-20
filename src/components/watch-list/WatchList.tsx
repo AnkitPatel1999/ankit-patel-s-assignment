@@ -7,9 +7,11 @@ import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 
 import { useState, useEffect, useRef } from 'react';
+import TokenModal from './TokenModal';
 
 
 export default function WatchList() {
+    const [showTokenModal, setShowTokenModal] = useState(false);
     const pageSize = 10;
     const totalResults = 100;
     const totalPages = Math.ceil(totalResults / pageSize);
@@ -43,9 +45,7 @@ export default function WatchList() {
 
 
     const handlePageChange = (page: number) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
+        setCurrentPage(page);
     };
 
     return (
@@ -55,21 +55,17 @@ export default function WatchList() {
                     <img src={star} alt="Star" />
                     <span>WatchList</span>
                 </div>
-
                 <div className='ae-d-flex ae-gap-12'>
                     <button className='ae-btn ae-btn-dark ae-radius-6 ae-d-flex ae-gap-5'>
                         <img className='ae-btn-icon' src={cached} alt="Refresh" />
                         <div className="ae-btn-text ae-white-fg-base-color">Refresh Prices</div>
                     </button>
-
-                    <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5'>
+                    <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5' onClick={() => setShowTokenModal(true)}>
                         <img className='ae-btn-icon' src={plus_mini} alt="Plus Mini" />
                         <div className="ae-btn-text">Add Token</div>
                     </button>
                 </div>
             </div>
-
-
             <div className='ae-mt-20'>
                 <div className='cu-watchlist-table'>
                     <div className='cu-watchlist-table-row cu-watchlist-table-header'>
@@ -115,15 +111,9 @@ export default function WatchList() {
                                         </div>
                                     )}
                                 </div>
-
-
                             </div>
                         </div>
-
                     </div>
-
-
-
                     {/* Pagination Info & Controls */}
                     <div className="cu-pagination-info ae-d-flex ae-justify-space-between ae-align-center ae-mt-24">
                         <span className="cu-pagination-results">{startResult} - {endResult} of {totalResults} results</span>
@@ -147,15 +137,11 @@ export default function WatchList() {
                             </div>
                         </div>
                     </div>
-
                     {/* Pagination Info & Controls ends*/}
-
-
                 </div>
             </div>
-
-                
-
+            {/* Token Modal */}
+            <TokenModal open={showTokenModal} onClose={() => setShowTokenModal(false)} />
         </>
-    )
+    );
 }

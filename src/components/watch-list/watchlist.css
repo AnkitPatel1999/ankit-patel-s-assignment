@@ -101,7 +101,10 @@
     top: 14px;
     min-width: 144px;
     background: #23272F;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
+    box-shadow: 0px 8px 16px 0px #00000014,
+        0px 4px 8px 0px #00000014,
+        0px 0px 0px 1px #00000014;
+
     z-index: 10;
     padding: 4px 0;
     display: flex;
@@ -124,7 +127,7 @@
     line-height: 20px;
     padding: 4px 12px;
     background: none;
-    box-shadow: 0px 8px 16px 0px #00000014;
+    /* box-shadow: 0px 8px 16px 0px #00000014; */
     /* box-shadow: 0px 4px 8px 0px #00000014; */
     /* box-shadow: 0px 0px 0px 1px #00000014; */
 
@@ -137,10 +140,12 @@
 }
 
 .cu-options-edit {
+    border-radius: 12px 12px 0 0;
     color: var(--dark-fg-subtle-color);
     border-bottom: 1px solid var(--borders-border-menu-bot, #FFFFFF14);
 }
 .cu-options-remove {
+    border-radius: 0 0 12px 12px;
     color: #F87171;
 }
 

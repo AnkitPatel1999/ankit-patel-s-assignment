@@ -1,0 +1,109 @@
+.cu-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.cu-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    min-width: 400px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 12px;
+    background: #212124;
+    box-shadow: 
+    0px 8px 16px 0px #00000052,
+    0px 4px 8px 0px #00000052,
+    0px 0px 0px 1px #FFFFFF1A,
+    0px -1px 0px 0px #FFFFFF0A,
+    0px 0px 0px 1.5px #FFFFFF0F inset,
+    0px 0px 0px 1px #18181B inset;
+
+    width: 640px;
+
+}
+
+.cu-modal-header {
+    padding: 20px 24px 0 24px;
+}
+
+.cu-modal-search {
+    width: 100%;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #181A20;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.cu-modal-list {
+    padding: 0 0 0 0;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.cu-modal-trending {
+    padding: 12px 24px 4px 24px;
+    color: #A1A1AA;
+    font-size: 14px;
+}
+
+.cu-modal-token-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.cu-modal-token-row:hover,
+.cu-modal-token-row.selected {
+    background: #181A20;
+}
+
+.cu-modal-token-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.cu-modal-radio {
+    margin-left: auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #A1A1AA;
+    background: none;
+}
+
+.cu-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #2A2D34;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cu-modal-add-btn {
+    background: #23272F;
+    color: #A1A1AA;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
