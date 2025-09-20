@@ -4,7 +4,26 @@ import cached from '../../assets/cached.svg';
 import ellipsis_horizontal from '../../assets/ellipsis_horizontal.svg';
 import './watchlist.css';
 
+import { useState } from 'react';
+
 export default function WatchList() {
+    // Example data for dynamic pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+    const totalResults = 100;
+    const totalPages = Math.ceil(totalResults / pageSize);
+
+    // Calculate start and end result numbers
+    const startResult = (currentPage - 1) * pageSize + 1;
+    const endResult = Math.min(currentPage * pageSize, totalResults);
+
+
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     return (
         <>
             <div className='ae-d-flex ae-justify-space-between ae-mt-48'>
@@ -29,7 +48,7 @@ export default function WatchList() {
 
             <div className='ae-mt-20'>
                 <div className='cu-watchlist-table'>
-                    <div className='cu-watchlist-table-row'>
+                    <div className='cu-watchlist-table-row cu-watchlist-table-header'>
                         <div className='cu-watchlist-table-header-cell'>Token</div>
                         <div className='cu-watchlist-table-header-cell'>Price</div>
                         <div className='cu-watchlist-table-header-cell'>24h %</div>
@@ -55,9 +74,40 @@ export default function WatchList() {
                         </div>
 
                     </div>
+
+
+
+                    {/* Pagination Info & Controls */}
+                    <div className="cu-pagination-info ae-d-flex ae-justify-space-between ae-align-center ae-mt-24">
+                        <span className="cu-pagination-results">{startResult} - {endResult} of {totalResults} results</span>
+                        <div className="cu-pagination-next-prev-container"> 
+                            <span className="cu-pagination-pages">{currentPage} of {totalPages} pages</span>
+                            <div className="ae-d-flex ae-justify-center ae-mt-12 ae-gap-16">
+                                <button
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={currentPage === 1 ? "cu-pagination-btn ae-dark-fg-disabled-color" : "cu-pagination-btn"}
+                                >
+                                    Prev
+                                </button>
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className={currentPage === totalPages ? "cu-pagination-btn ae-dark-fg-disabled-color" : "cu-pagination-btn"}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Pagination Info & Controls ends*/}
+
+
                 </div>
             </div>
 
+                
 
         </>
     )

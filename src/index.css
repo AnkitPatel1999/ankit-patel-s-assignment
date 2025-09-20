@@ -15,6 +15,7 @@
   --white-color: #FFFFFF;
   --white-fg-base-color: #F4F4F5;
   --dark-fg-subtle-color: #A1A1AA;
+  --dark-fg-disabled-color: #52525B;
 
 
   --font-family-inter: 'Inter', sans-serif;
@@ -99,6 +100,10 @@ body {
   color: var(--dark-fg-subtle-color);
 }
 
+.ae-dark-fg-disabled-color {
+  color: var(--dark-fg-disabled-color);
+}
+
 .ae-radius-6 {
   border-radius: 6px;
 }
@@ -166,6 +171,11 @@ body {
 .ae-gap-12 {
   gap: 12px;
 }
+
+.ae-gap-16 {
+  gap: 16px;
+}
+
 .ae-gap-10 {
   gap: 10px;
 }
