@@ -2,20 +2,44 @@ import star from '../../assets/star.svg';
 import plus_mini from '../../assets/plus_mini.svg';
 import cached from '../../assets/cached.svg';
 import ellipsis_horizontal from '../../assets/ellipsis_horizontal.svg';
+import trash from '../../assets/trash.svg';
+import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
 
 export default function WatchList() {
-    // Example data for dynamic pagination
-    const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
     const totalResults = 100;
     const totalPages = Math.ceil(totalResults / pageSize);
 
+    // state for dynamic pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
     // Calculate start and end result numbers
     const startResult = (currentPage - 1) * pageSize + 1;
     const endResult = Math.min(currentPage * pageSize, totalResults);
+
+
+
+    
+    // Close dropdown on click outside or inside
+    useEffect(() => {
+        function handleClick(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setShowDropdown(false);
+            }
+        }
+        if (showDropdown) {
+            document.addEventListener('mousedown', handleClick);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
+    }, [showDropdown]);
 
 
     const handlePageChange = (page: number) => {
@@ -69,7 +93,30 @@ export default function WatchList() {
                             <div className='cu-watchlist-table-data-cell'>$30B</div>
                             <div className='cu-watchlist-table-data-cell'>18.7M BTC</div>
                             <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-flex-end'>
-                                <img src={ellipsis_horizontal} alt="More Options" className='cu-more-options-icon' />
+                                <div className="cu-more-options-wrapper" style={{ position: 'relative' }} ref={dropdownRef}>
+                                    <img
+                                        src={ellipsis_horizontal}
+                                        alt="More Options"
+                                        className='cu-more-options-icon'
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            setShowDropdown(show => !show);
+                                        }}
+                                    />
+                                    {showDropdown && (
+                                        <div className="cu-options-dropdown">
+                                            <button className="cu-options-dropdown-item cu-options-edit" tabIndex={0} onClick={() => setShowDropdown(false)}>
+                                                <img src={pencil_square} alt='Edit Holdings' className="cu-options-edit-icon" />Edit Holdings
+                                            </button>
+                                            <button className="cu-options-dropdown-item cu-options-remove" tabIndex={0} onClick={() => setShowDropdown(false)}>
+                                                <img src={trash} alt='Remove' className="cu-options-remove-icon" />Remove
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+
+
                             </div>
                         </div>
 

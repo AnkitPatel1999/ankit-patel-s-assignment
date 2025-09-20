@@ -84,3 +84,65 @@
 .cu-pagination-info .ae-dark-fg-disabled-color {
   color: var(--dark-fg-disabled-color);
 }
+
+
+
+
+
+/* More Options Dropdown Styles start */
+.cu-more-options-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cu-options-dropdown {
+    position: absolute;
+    right: 15px;
+    top: 14px;
+    min-width: 144px;
+    background: #23272F;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
+    z-index: 10;
+    padding: 4px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-radius: 8px;
+}
+
+.cu-options-dropdown-item {
+    border: none;
+    color: var(--dark-fg-subtle-color);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-500);
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, color 0.2s;
+    line-height: 20px;
+    padding: 4px 12px;
+    background: none;
+    box-shadow: 0px 8px 16px 0px #00000014;
+    /* box-shadow: 0px 4px 8px 0px #00000014; */
+    /* box-shadow: 0px 0px 0px 1px #00000014; */
+
+}
+
+.cu-options-dropdown-item:focus,
+.cu-options-dropdown-item:hover {
+    background: #23272F;
+    color: var(--white-fg-base-color);
+}
+
+.cu-options-edit {
+    color: var(--dark-fg-subtle-color);
+    border-bottom: 1px solid var(--borders-border-menu-bot, #FFFFFF14);
+}
+.cu-options-remove {
+    color: #F87171;
+}
+
+
+/* More Options Dropdown Styles end */
