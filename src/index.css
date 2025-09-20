@@ -1,7 +1,4 @@
 :root {
-  font-family: 'inter', sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,9 +10,16 @@
   --green-color: #A9E851; /* green */
 
   --dark-color: #18181B;
+  --neutral-400-color: #A1A1AA;
+  --neutral-800-color: #27272A;
   --white-color: #FFFFFF;
 
+
+  --font-family-inter: 'Inter', sans-serif;
   --fs-sm: 13px; /* small */
+  --fs-md: 14px; /* medium */
+  --fs-lg: 16px; /* large */
+  --fs-4xlg: 56px; /* 4x large */
 
   --fw-400: 400;
   --fw-500: 500;
@@ -25,9 +29,19 @@
 
 body {
   background-color: var(--primary-color);
+  color: var(--white-color);
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: var(--font-family-inter);
+  line-height: 1.5;
+  font-weight: 400;
+  font-size:  var(--fs-sm);
+}
+
+.ae-max-width-1440 {
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 /* common button classes start*/
@@ -62,14 +76,54 @@ body {
   font-size: 13px;
   font-weight: 500;
   line-height: 20px;
+  font-family: var(--font-family-inter);
 }
 
 
 /* common button classes end*/
 
 
+/* padding & margin classes started */
+
+.ae-mx-28 {
+  margin-left: 28px;
+  margin-right: 28px;
+}
+.ae-my-28 {
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
+.ae-px-28 {
+  padding-left: 28px;
+  padding-right: 28px;
+}
+.ae-py-28 {
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.ae-mt-20 {
+  margin-top: 20px;
+}
+.ae-mb-20 {
+  margin-bottom: 20px;  
+}
+.ae-ml-20 {
+  margin-left: 20px;
+}
+.ae-mr-20 {
+  margin-right: 20px;  
+}
+
+/* padding & margin classes ended  */
+
 .ae-d-flex {
   display: flex;
+}
+
+.ae-f-column {
+  flex-direction: column;
 }
 
 .ae-justify-space-between {
@@ -86,3 +140,6 @@ body {
 .ae-gap-5 {
   gap: 5px;
 }
+
+
+
