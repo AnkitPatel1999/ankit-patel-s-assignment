@@ -23,7 +23,9 @@
   --fs-sm: 13px; /* small */
   --fs-md: 14px; /* medium */
   --fs-lg: 16px; /* large */
+  --fs-xlg: 18px; /* large */
   --fs-2xlg: 24px; /* 2x large */
+  --fs-3xlg: 40px; /* 2x large */
   --fs-4xlg: 56px; /* 4x large */
 
   --fw-400: 400;
@@ -192,5 +194,24 @@ body {
   gap: 5px;
 }
 
+.ae-overflow-auto { overflow: auto;}
 
 
+
+/* For tablets & mobile (≤ 768px) */
+@media (max-width: 768px) {
+
+  .ae-m-m-0{
+    margin: 0;
+  }
+
+  .ae-m-py-24 {
+    padding: 0 24px;
+  }
+
+  .hidden-phone{
+    display: none;
+  }
+
+
+}

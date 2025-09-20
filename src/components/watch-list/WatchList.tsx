@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react';
 import star from '../../assets/star.svg';
 import plus_mini from '../../assets/plus_mini.svg';
 import cached from '../../assets/cached.svg';
@@ -5,9 +6,7 @@ import ellipsis_horizontal from '../../assets/ellipsis_horizontal.svg';
 import trash from '../../assets/trash.svg';
 import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
-
-import { useState, useEffect, useRef } from 'react';
-import TokenModal from './TokenModal';
+import TokenModal from '../modals/TokenModal';
 
 
 export default function WatchList() {
@@ -50,7 +49,8 @@ export default function WatchList() {
 
     return (
         <>
-            <div className='ae-d-flex ae-justify-space-between ae-mt-48'>
+            <div className='cu-saperator'></div>
+            <div className='ae-d-flex ae-justify-space-between ae-mt-48 ae-m-py-24'>
                 <div className='ae-d-flex ae-align-center ae-gap-8 cu-watchlist-header'>
                     <img src={star} alt="Star" />
                     <span>WatchList</span>
@@ -58,7 +58,7 @@ export default function WatchList() {
                 <div className='ae-d-flex ae-gap-12'>
                     <button className='ae-btn ae-btn-dark ae-radius-6 ae-d-flex ae-gap-5'>
                         <img className='ae-btn-icon' src={cached} alt="Refresh" />
-                        <div className="ae-btn-text ae-white-fg-base-color">Refresh Prices</div>
+                        <div className="ae-btn-text ae-white-fg-base-color hidden-phone">Refresh Prices</div>
                     </button>
                     <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5' onClick={() => setShowTokenModal(true)}>
                         <img className='ae-btn-icon' src={plus_mini} alt="Plus Mini" />
@@ -66,7 +66,7 @@ export default function WatchList() {
                     </button>
                 </div>
             </div>
-            <div className='ae-mt-20'>
+            <div className='ae-mt-20 ae-overflow-auto ae-m-py-24'>
                 <div className='cu-watchlist-table'>
                     <div className='cu-watchlist-table-row cu-watchlist-table-header'>
                         <div className='cu-watchlist-table-header-cell'>Token</div>

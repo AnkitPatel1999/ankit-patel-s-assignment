@@ -25,7 +25,7 @@ const token_names = [
         </div>
         <div className="cu-hero-common-block cu-hero-graph-block">
             <div className="cu-hero-title">Portfolio Total</div>
-            <div className="ae-d-flex ae-mt-20">
+            <div className="ae-d-flex ae-mt-20 cu-hero-graph-container">
               <div className="cu-doughnut-chart-container ">
                   <DoughnutChart token_names={token_names} />
               </div>

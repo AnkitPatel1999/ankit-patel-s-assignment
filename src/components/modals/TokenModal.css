@@ -14,7 +14,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1001;
-    min-width: 400px;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -29,8 +28,8 @@
         0px 0px 0px 1.5px #FFFFFF0F inset,
         0px 0px 0px 1px #18181B inset;
 
-    width: 640px;
-
+    max-width: 640px;
+    width: 91%;
 }
 
 .cu-modal-header {
@@ -132,7 +131,7 @@
 }
 
 ::-webkit-scrollbar-track {
-    background: #1a1a1a;
+    background: none;
     /* track color */
     border-radius: 10px;
 }

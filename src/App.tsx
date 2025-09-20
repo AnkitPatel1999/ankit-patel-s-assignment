@@ -9,7 +9,7 @@ function App() {
     <>
       <div className="ae-max-width-1440">
         <Header />
-        <div className='ae-mx-28 ae-my-28'>
+        <div className='ae-mx-28 ae-my-28 ae-m-m-0'>
           <Hero />
           <WatchList />
         </div>
