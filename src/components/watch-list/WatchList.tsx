@@ -6,11 +6,11 @@ import ellipsis_horizontal from '../../assets/ellipsis_horizontal.svg';
 import trash from '../../assets/trash.svg';
 import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
-import TokenModal from '../modals/TokenModal';
+import CoinModal from '../modals/CoinModal';
 
 
 export default function WatchList() {
-    const [showTokenModal, setShowTokenModal] = useState(false);
+    const [showCoinModal, setShowCoinModal] = useState(false);
     const pageSize = 10;
     const totalResults = 100;
     const totalPages = Math.ceil(totalResults / pageSize);
@@ -60,7 +60,7 @@ export default function WatchList() {
                         <img className='ae-btn-icon' src={cached} alt="Refresh" />
                         <div className="ae-btn-text ae-white-fg-base-color hidden-phone">Refresh Prices</div>
                     </button>
-                    <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5' onClick={() => setShowTokenModal(true)}>
+                    <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5' onClick={() => setShowCoinModal(true)}>
                         <img className='ae-btn-icon' src={plus_mini} alt="Plus Mini" />
                         <div className="ae-btn-text">Add Token</div>
                     </button>
@@ -141,7 +141,7 @@ export default function WatchList() {
                 </div>
             </div>
             {/* Token Modal */}
-            <TokenModal open={showTokenModal} onClose={() => setShowTokenModal(false)} />
+            <CoinModal open={showCoinModal} onClose={() => setShowCoinModal(false)} />
         </>
     );
 }
