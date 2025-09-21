@@ -1,0 +1,9 @@
+- fallback image on image failed
+
+- used unique keys on rending data 
+
+- modal will only load onclick button
+
+- after closing it will remove from DOM - if dont remove sometime it will conflict with their css and js
+
+- added shimmer effect on load

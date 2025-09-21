@@ -72,7 +72,8 @@
     align-items: center;
     gap: 12px;
     font-size: var(--fs-sm);
-    padding: 6px 16px;
+    padding: 6px 6px;
+    margin: 0 6px;
     cursor: pointer;
     transition: background 0.2s;
     line-height: 20px;
@@ -95,7 +96,12 @@
 
 .cu-modal-token-row:hover,
 .cu-modal-token-row.selected {
-    color: #bbbbbb;
+    background: #27272A;
+    border-radius: 6px;
+}
+
+.cu-modal-token-row.selected {
+    background: #A9E8510F;
 }
 
 .cu-modal-pending-error-nodata-row:hover{
