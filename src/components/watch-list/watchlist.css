@@ -6,18 +6,22 @@
 .cu-watchlist-table {
     border: 1px solid var(--alpha-white-alpha-8, #FFFFFF14);
     border-radius: 12px;
-    min-width: 840px;
+    min-width: 1100px;
 }
 
 .cu-watchlist-table-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
     /* adjust as needed */
     align-items: center;
     gap: 16px;
     /* spacing between columns */
     min-height: 48px;
     padding: 0 24px;
+}
+
+.cu-watchlist-no-data{
+    padding: 24px;
 }
 
 .cu-watchlist-table-header {

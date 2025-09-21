@@ -48,6 +48,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
             }));
         console.log("selectedCoins", selectedCoins);
         watchlistDispatch(addToWatchList(selectedCoins));
+        onClose();
     }
 
     useEffect(() => {

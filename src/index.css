@@ -219,7 +219,7 @@ body {
   background-color: #71717a00;
   overflow: hidden;
   border-radius: 4px;
-  width: 200px;  /* explicit width */
+  /* width: 200px;  explicit width */
   height: 20px;  /* explicit height */
 }
 

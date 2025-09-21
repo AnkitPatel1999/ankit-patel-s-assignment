@@ -16,6 +16,10 @@ function WatchList() {
     const [showCoinModal, setShowCoinModal] = useState(false);
     const dispatch = useDispatch();
     let coinsWatchlist = useSelector((state: any) => state.watchlist);
+    
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    
     const pageSize = 10;
     const totalResults = coinsWatchlist.length;
     const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
@@ -98,6 +102,48 @@ function WatchList() {
                         <div className='cu-watchlist-table-header-cell'></div>
                     </div>
                     <div className='cu-watchlist-table-body'>
+
+
+                        {isLoading && Array.from({ length: 5 }, (_, index) => (
+                            <div className="cu-watchlist-table-row" key={`shimmer-${index}`}>
+                                <div className='cu-watchlist-table-data-cell ae-d-flex ae-align-center ae-gap-12'>
+                                    <div className="ae-shimmer cu-shimmer-thumb"></div>
+                                    <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                                </div>
+                                <div className='cu-watchlist-table-data-cell'>
+                                    <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                                </div>
+
+                                <div className='cu-watchlist-table-data-cell'>
+                                    <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                                </div>
+
+                                <div className='cu-watchlist-table-data-cell'>
+                                    <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                                </div>
+
+                                <div className='cu-watchlist-table-data-cell'>
+                                    <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                                </div>
+
+                                <div className='cu-watchlist-table-data-cell'>
+                                    <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                                </div>
+
+                                
+                                <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-content-right'>
+                                    <div className="ae-shimmer cu-shimmer-radio-btn"></div>
+                                </div>
+                            </div>
+                        ))}
+
+                        {(!paginatedCoins || paginatedCoins.length === 0) && (
+                            <div>
+                                <div className='cu-watchlist-no-data'>
+                                    No Token in your watchlist. Click "Add Token" to get started.
+                                </div>
+                            </div>
+                        )}
 
                         { paginatedCoins && paginatedCoins.map((coin: any, index: number) => (
                             <div className='cu-watchlist-table-row' key={coin.symbol + index}>
