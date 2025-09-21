@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import DoughnutChart from "../doughnut-chart/DoughnutChart"
 import "./hero.css" 
+import { useSelector } from "react-redux";
 
 export default function Hero() {
 
@@ -12,6 +14,24 @@ const token_names = [
   { name: "Ripple", short_form: "XRP", value: 7.0 , color: "#FB7185" }
 ];
 
+  const [portfolioTotal, setPortfolioTotal] = useState<string>("$000");
+
+  let coinsWatchlist = useSelector((state: any) => state.watchlist);
+
+
+  useEffect(()=>{
+
+    if(coinsWatchlist) {
+      let total = coinsWatchlist.reduce((acc: number, coin: any) => {
+        console.log(coin)
+        return acc + parseFloat(coin.total_volume);
+      }, 0);
+      console.log("total ",total)
+      setPortfolioTotal("$" + new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(total));
+    }
+  },[coinsWatchlist])
+
+
   return (
     <>
 
@@ -19,7 +39,7 @@ const token_names = [
         <div className="ae-d-flex ae-f-column ae-justify-space-between cu-hero-common-block cu-hero-total-block">
             <div className="">
                 <div className="cu-hero-title">Portfolio Total</div>
-                <div className="cu-hero-value">$10,275.08</div>
+                <div className="cu-hero-value">{portfolioTotal}</div>
             </div>
             <span className="cu-hero-last-updated-time">Last updated: 3:42:12 PM</span>
         </div>

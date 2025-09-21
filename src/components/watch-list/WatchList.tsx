@@ -177,7 +177,7 @@ function WatchList() {
                                                 placeholder='Select'
                                             />
 
-                                            <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5' onClick={() => saveHolding(coin.symbol)}>
+                                            <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5 cu-save-btn' onClick={() => saveHolding(coin.symbol)}>
                                                 <div className="ae-btn-text">Save</div>
                                             </button>
                                         </div>

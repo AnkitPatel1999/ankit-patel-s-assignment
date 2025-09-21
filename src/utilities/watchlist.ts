@@ -8,5 +8,6 @@ export function loadWatchlist(): WatchListItem[] {
     } catch {}
     return [];
 }
+
     
 
