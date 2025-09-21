@@ -20,7 +20,7 @@ export default function WatchList() {
 
     // state for dynamic pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [showDropdown, setShowDropdown] = useState(false);
+    const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Calculate start and end result numbers
@@ -39,16 +39,16 @@ export default function WatchList() {
     useEffect(() => {
         function handleClick(event: MouseEvent) {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setShowDropdown(false);
+                setOpenDropdownIndex(null);
             }
         }
-        if (showDropdown) {
+        if (openDropdownIndex !== null) {
             document.addEventListener('mousedown', handleClick);
         }
         return () => {
             document.removeEventListener('mousedown', handleClick);
         };
-    }, [showDropdown]);
+    }, [openDropdownIndex]);
 
 
     const handlePageChange = (page: number) => {
@@ -107,15 +107,15 @@ export default function WatchList() {
                                             style={{ cursor: 'pointer' }}
                                             onClick={e => {
                                                 e.stopPropagation();
-                                                setShowDropdown(show => !show);
+                                                setOpenDropdownIndex(openDropdownIndex === index ? null : index);
                                             }}
                                         />
-                                        {showDropdown && (
+                                        {openDropdownIndex === index && (
                                             <div className="cu-options-dropdown">
-                                                <button className="cu-options-dropdown-item cu-options-edit" tabIndex={0} onClick={() => setShowDropdown(false)}>
+                                                <button className="cu-options-dropdown-item cu-options-edit" tabIndex={0} onClick={() => setOpenDropdownIndex(null)}>
                                                     <img src={pencil_square} alt='Edit Holdings' className="cu-options-edit-icon" />Edit Holdings
                                                 </button>
-                                                <button className="cu-options-dropdown-item cu-options-remove" tabIndex={0} onClick={() => setShowDropdown(false)}>
+                                                <button className="cu-options-dropdown-item cu-options-remove" tabIndex={0} onClick={() => setOpenDropdownIndex(null)}>
                                                     <img src={trash} alt='Remove' className="cu-options-remove-icon" />Remove
                                                 </button>
                                             </div>
@@ -123,8 +123,7 @@ export default function WatchList() {
                                     </div>
                                 </div>
                             </div>
-                        ))
-                        }
+                        ))}
 
 
                     </div>
