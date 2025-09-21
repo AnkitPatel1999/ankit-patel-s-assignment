@@ -7,12 +7,14 @@ import trash from '../../assets/trash.svg';
 import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 import CoinModal from '../modals/CoinModal';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeFromWatchList } from '../../features/watchlist/watchlist-slice';
 import { loadWatchlist } from '../../utilities/watchlist';
 
 
-export default function WatchList() {
+function WatchList() {
     const [showCoinModal, setShowCoinModal] = useState(false);
+    const dispatch = useDispatch();
     let coinsWatchlist = useSelector((state: any) => state.watchlist);
     const pageSize = 10;
     const totalResults = coinsWatchlist.length;
@@ -21,7 +23,7 @@ export default function WatchList() {
     // state for dynamic pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [openDropdownIndex, setOpenDropdownIndex] = useState<number | null>(null);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const dropdownRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     // Calculate start and end result numbers
     const startResult = totalResults === 0 ? 0 : (currentPage - 1) * pageSize + 1;
@@ -30,15 +32,15 @@ export default function WatchList() {
 
     const paginatedCoins = coinsWatchlist.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    const onRefresh = () => {
-        loadWatchlist();
-        setCurrentPage(1);
-    }
     
-    // Close dropdown on click outside or inside
+    // Close dropdown on click outside for the open dropdown only
     useEffect(() => {
         function handleClick(event: MouseEvent) {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            if (
+                openDropdownIndex !== null &&
+                dropdownRefs.current[openDropdownIndex] &&
+                !dropdownRefs.current[openDropdownIndex]?.contains(event.target as Node)
+            ) {
                 setOpenDropdownIndex(null);
             }
         }
@@ -50,10 +52,20 @@ export default function WatchList() {
         };
     }, [openDropdownIndex]);
 
+    const onRefresh = () => {
+        loadWatchlist();
+        setCurrentPage(1);
+    }
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
+
+    const removeWatchlist = (symbol: string) => {
+        console.log("Removing from watchlist:", symbol);
+        dispatch(removeFromWatchList({ symbol }));
+        setOpenDropdownIndex(null);
+    }
 
     return (
         <>
@@ -99,7 +111,11 @@ export default function WatchList() {
                                 <div className='cu-watchlist-table-data-cell'>{coin.total_volume}</div>
                                 <div className='cu-watchlist-table-data-cell'>{coin.total_volume_btc}</div>
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-content-right'>
-                                    <div className="cu-more-options-wrapper" style={{ position: 'relative' }} ref={dropdownRef}>
+                                    <div
+                                        className="cu-more-options-wrapper"
+                                        style={{ position: 'relative' }}
+                                        ref={el => { dropdownRefs.current[index] = el; }}
+                                    >
                                         <img
                                             src={ellipsis_horizontal}
                                             alt="More Options"
@@ -112,10 +128,24 @@ export default function WatchList() {
                                         />
                                         {openDropdownIndex === index && (
                                             <div className="cu-options-dropdown">
-                                                <button className="cu-options-dropdown-item cu-options-edit" tabIndex={0} onClick={() => setOpenDropdownIndex(null)}>
+                                                <button
+                                                    className="cu-options-dropdown-item cu-options-edit"
+                                                    tabIndex={0}
+                                                    onClick={e => {
+                                                        e.stopPropagation();
+                                                        setOpenDropdownIndex(null);
+                                                    }}
+                                                >
                                                     <img src={pencil_square} alt='Edit Holdings' className="cu-options-edit-icon" />Edit Holdings
                                                 </button>
-                                                <button className="cu-options-dropdown-item cu-options-remove" tabIndex={0} onClick={() => setOpenDropdownIndex(null)}>
+                                                <button
+                                                    className="cu-options-dropdown-item cu-options-remove"
+                                                    tabIndex={0}
+                                                    onClick={e => {
+                                                        e.stopPropagation();
+                                                        removeWatchlist(coin.symbol);
+                                                    }}
+                                                >
                                                     <img src={trash} alt='Remove' className="cu-options-remove-icon" />Remove
                                                 </button>
                                             </div>
@@ -158,3 +188,5 @@ export default function WatchList() {
         </>
     );
 }
+
+export default WatchList;
