@@ -12,9 +12,10 @@ import { useSelector } from 'react-redux';
 
 export default function WatchList() {
     const [showCoinModal, setShowCoinModal] = useState(false);
+    const coinsWatchlist = useSelector((state: any) => state.watchlist);
     const pageSize = 10;
-    const totalResults = 100;
-    const totalPages = Math.ceil(totalResults / pageSize);
+    const totalResults = coinsWatchlist.length;
+    const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
 
     // state for dynamic pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,11 +23,11 @@ export default function WatchList() {
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     // Calculate start and end result numbers
-    const startResult = (currentPage - 1) * pageSize + 1;
+    const startResult = totalResults === 0 ? 0 : (currentPage - 1) * pageSize + 1;
     const endResult = Math.min(currentPage * pageSize, totalResults);
 
 
-    const coinsWatchlist = useSelector((state: any) => state.watchlist);
+    const paginatedCoins = coinsWatchlist.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     
     // Close dropdown on click outside or inside
@@ -81,8 +82,8 @@ export default function WatchList() {
                     </div>
                     <div className='cu-watchlist-table-body'>
 
-                        { coinsWatchlist && coinsWatchlist.map((coin: any, index: number) => (
-                            <div className='cu-watchlist-table-row'>
+                        { paginatedCoins && paginatedCoins.map((coin: any, index: number) => (
+                            <div className='cu-watchlist-table-row' key={coin.symbol + index}>
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-align-center ae-gap-12'>
                                     <img className='cu-token-logo' src={coin.small} alt={coin.name} />
                                     <div>{coin.name} <span className='ae-dark-fg-subtle-color'>({coin.symbol})</span></div>
@@ -117,8 +118,7 @@ export default function WatchList() {
                                     </div>
                                 </div>
                             </div>
-
-                            ))
+                        ))
                         }
 
 
