@@ -198,6 +198,88 @@ body {
 
 
 
+/* shimmer effect css start */
+.ae-shimmer {
+  position: relative;
+  background-color: #71717a00;
+  overflow: hidden;
+  border-radius: 4px;
+  width: 200px;  /* explicit width */
+  height: 20px;  /* explicit height */
+}
+
+.ae-shimmer.circle {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.ae-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 150%;  
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,        /* transparent */
+    rgba(255, 255, 255, 0.15) 50%,    /* light shimmer */
+    rgba(255, 255, 255, 0) 100%       /* transparent */
+  );
+  animation: ae-shimmer 1.5s linear infinite;
+}
+
+@keyframes ae-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* shimmer effect css end */
+
+
+
+/* scroll bar css start */
+
+/* Chrome, Safari, Edge */
+::-webkit-scrollbar {
+    width: 4px;
+    /* scrollbar width */
+    /* height: 8px;           scrollbar height for horizontal */
+}
+
+::-webkit-scrollbar-track {
+    background: none;
+    /* track color */
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    /* scrollbar handle */
+    background: var(--borders-border-base, #FFFFFF1A);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+    /* hover effect */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: initial;
+    /* auto | thin | none */
+    /* scrollbar-color: #555 #1a1a1a;   thumb color | track color */
+}
+
+/* scroll bar css end */
+
+
+
 /* For tablets & mobile (≤ 768px) */
 @media (max-width: 768px) {
 

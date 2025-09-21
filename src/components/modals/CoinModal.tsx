@@ -20,27 +20,24 @@ interface CoinModalProps {
 export default function CoinModal({ open, onClose }: CoinModalProps) {
     if (!open) return null;
 
-    const [isPending, startTransition] = useTransition();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | null>(null);
+    const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | []>([]);
 
     useEffect(() => {
-        startTransition(() => {
-            fetchTrendingCoins().then((res) => {
-                if (res && Array.isArray(res.coins) && res.coins.length > 0) {
-                    setTrendingCoins(res);
-                }
-            }).catch((err) => {
-                setError("Failed to load trending coins, please try after having a coffee.");
-            });
+        setIsLoading(true);
+        fetchTrendingCoins().then((res) => {
+            setIsLoading(false);
+            if (res && Array.isArray(res.coins) && res.coins.length > 0) {
+                setTrendingCoins(res);
+            }
+        }).catch((err) => {
+            setIsLoading(false);
+            setError("Failed to load trending coins, please try after having a coffee.");
         });
 
     }, []);
 
-
-    if (isPending && !trendingCoins) return <p>Loading trending coins...</p>;
-    if (error) return <p className="">Error: {error}</p>;
-    if (!trendingCoins) return <p>No trending coins available.</p>;
 
     return (
         <>
@@ -54,7 +51,22 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
 
 
 
-                    {trendingCoins?.coins.map((coin) => (
+                    {isLoading && Array.from({ length: 7 }, (_, index) => (
+                        <div className="cu-modal-token-row cu-modal-pending-error-nodata-row">
+                            <div className="ae-shimmer cu-shimmer-thumb"></div>
+                            <div className="ae-shimmer cu-shimmer-coin-name"></div>
+                            <div className="ae-shimmer cu-shimmer-radio-btn"></div>
+                        </div>
+                    ))}
+
+   
+                    {error && <p className="cu-modal-token-row cu-modal-pending-error-nodata-row">Error: {error}</p>}
+                    {!isLoading && !error && (!trendingCoins || !trendingCoins.coins) && (
+                        <p className="cu-modal-token-row cu-modal-pending-error-nodata-row">No trending coins available.</p>
+                    )}
+
+
+                    {trendingCoins.coins && trendingCoins?.coins.map((coin) => (
                         <div className="cu-modal-token-row" key={`Coin-modal-${coin.item.coin_id}`}>
                             <img 
                                 src={coin.item.small} 
