@@ -1,21 +1,47 @@
-import React from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import './TokenModal.css';
+import { fetchTrendingCoins } from '../../utilities/coingecko-api';
+import type { TrendingResponse } from '../../dto/coingecko-types';
+
 
 interface TokenModalProps {
     open: boolean;
     onClose: () => void;
 }
 
-const tokens = [
-    { name: 'Not Coin', symbol: 'NOT', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png' },
-    { name: 'Ethereum', symbol: 'ETH', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png' },
-    { name: 'Hyperliquid', symbol: 'HYPE', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
-    { name: 'PinLink', symbol: 'PIN', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3.png' },
-    { name: 'Stader', symbol: 'SD', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4.png' },
-];
+// const tokens = [
+//     { name: 'Not Coin', symbol: 'NOT', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png' },
+//     { name: 'Ethereum', symbol: 'ETH', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png' },
+//     { name: 'Hyperliquid', symbol: 'HYPE', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/2.png' },
+//     { name: 'PinLink', symbol: 'PIN', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3.png' },
+//     { name: 'Stader', symbol: 'SD', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4.png' },
+// ];
 
 export default function TokenModal({ open, onClose }: TokenModalProps) {
     if (!open) return null;
+
+    const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
+    const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | null>(null);
+
+    useEffect(() => {
+        startTransition(() => {
+            fetchTrendingCoins().then((res) => {
+                if (res && Array.isArray(res.coins) && res.coins.length > 0) {
+                    setTrendingCoins(res);
+                }
+            }).catch((err) => {
+                setError("Failed to load trending coins, please try after having a coffee.");
+            });
+        });
+
+    }, []);
+
+
+    if (isPending && !trendingCoins) return <p>Loading trending coins...</p>;
+    if (error) return <p className="">Error: {error}</p>;
+    if (!trendingCoins) return <p>No trending coins available.</p>;
+
     return (
         <>
             <div className="cu-modal-backdrop" onClick={onClose} />
@@ -25,10 +51,10 @@ export default function TokenModal({ open, onClose }: TokenModalProps) {
                 </div>
                 <div className="cu-modal-trending">Trending</div>
                 <div className="cu-modal-list">
-                    {tokens.map((token, idx) => (
+                    {trendingCoins?.coins.map((coin, idx) => (
                         <div className="cu-modal-token-row" key={idx}>
-                            <img src={token.img} alt={token.name} className="cu-modal-token-logo" />
-                            <span>{token.name} ({token.symbol})</span>
+                            <img src={coin.item.small} alt={coin.item.name} className="cu-modal-token-logo" />
+                            <span className='cu-modal-token-name'>{coin.item.name} ({coin.item.symbol})</span>
                             <span className="cu-modal-radio" />
                         </div>
                     ))}
