@@ -16,10 +16,10 @@ function WatchList() {
     const [showCoinModal, setShowCoinModal] = useState(false);
     const dispatch = useDispatch();
     let coinsWatchlist = useSelector((state: any) => state.watchlist);
-    
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    
+
     const pageSize = 10;
     const totalResults = coinsWatchlist.length;
     const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
@@ -36,7 +36,7 @@ function WatchList() {
 
     const paginatedCoins = coinsWatchlist.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-    
+
     // Close dropdown on click outside for the open dropdown only
     useEffect(() => {
         function handleClick(event: MouseEvent) {
@@ -71,6 +71,18 @@ function WatchList() {
         setOpenDropdownIndex(null);
     }
 
+    // Editable holding state per coin
+    const [holdingEdits, setHoldingEdits] = useState<{ [symbol: string]: string }>({});
+    const [editingSymbol, setEditingSymbol] = useState<string | null>(null);
+
+    // Save holding value to Redux/localStorage (implement updateHolding action in your slice)
+    const saveHolding = (symbol: string) => {
+        const value = holdingEdits[symbol];
+        // Dispatch updateHolding action (implement in your slice)
+        dispatch({ type: 'watchlist/updateHolding', payload: { symbol, holding: value } });
+        setEditingSymbol(null);
+    };
+
     return (
         <>
             <div className='cu-saperator'></div>
@@ -97,7 +109,7 @@ function WatchList() {
                         <div className='cu-watchlist-table-header-cell'>Price</div>
                         <div className='cu-watchlist-table-header-cell'>24h %</div>
                         <div className='cu-watchlist-table-header-cell'>Sparkline (7d)</div>
-                        <div className='cu-watchlist-table-header-cell'>Holding</div>
+                        <div className='cu-watchlist-table-header-cell cu-watchlist-table-holding-cell'>Holding</div>
                         <div className='cu-watchlist-table-header-cell'>Value</div>
                         <div className='cu-watchlist-table-header-cell'></div>
                     </div>
@@ -130,7 +142,7 @@ function WatchList() {
                                     <div className="ae-shimmer cu-shimmer-coin-name"></div>
                                 </div>
 
-                                
+
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-content-right'>
                                     <div className="ae-shimmer cu-shimmer-radio-btn"></div>
                                 </div>
@@ -145,7 +157,7 @@ function WatchList() {
                             </div>
                         )}
 
-                        { paginatedCoins && paginatedCoins.map((coin: any, index: number) => (
+                        {paginatedCoins && paginatedCoins.map((coin: any, index: number) => (
                             <div className='cu-watchlist-table-row' key={coin.symbol + index}>
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-align-center ae-gap-12'>
                                     <img className='cu-token-logo' src={coin.small} alt={coin.name} />
@@ -154,7 +166,34 @@ function WatchList() {
                                 <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color'>{coin.price}</div>
                                 <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color cu-positive-change'>{coin.price_change_percentage_24h}</div>
                                 <div className='cu-watchlist-table-data-cell'><img className='cu-watchlist-sparkline-img' src={coin.sparkline} alt={coin.name} /></div>
-                                <div className='cu-watchlist-table-data-cell'>{coin.total_volume}</div>
+                                <div className='cu-watchlist-table-data-cell cu-watchlist-table-holding-cell '>
+                                    {editingSymbol === coin.symbol ? (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <input
+                                                type="number"
+                                                value={holdingEdits[coin.symbol] ?? coin.total_volume}
+                                                onChange={e => setHoldingEdits({ ...holdingEdits, [coin.symbol]: e.target.value })}
+                                                className="cu-holding-input"
+                                                placeholder='Select'
+                                            />
+
+                                            <button className='ae-btn ae-btn-green ae-radius-6 ae-d-flex ae-gap-5' onClick={() => saveHolding(coin.symbol)}>
+                                                <div className="ae-btn-text">Save</div>
+                                            </button>
+                                        </div>
+                                    ) : (
+
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                            onClick={() => {
+                                                setEditingSymbol(coin.symbol);
+                                                setHoldingEdits({ ...holdingEdits, [coin.symbol]: coin.total_volume });
+                                            }}
+                                        >
+                                            <span>{coin.total_volume}</span>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className='cu-watchlist-table-data-cell'>{coin.total_volume_btc}</div>
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-content-right'>
                                     <div
@@ -206,7 +245,7 @@ function WatchList() {
                     {/* Pagination Info & Controls */}
                     <div className="cu-pagination-info ae-d-flex ae-justify-space-between ae-align-center ae-mt-24">
                         <span className="cu-pagination-results">{startResult} - {endResult} of {totalResults} results</span>
-                        <div className="cu-pagination-next-prev-container"> 
+                        <div className="cu-pagination-next-prev-container">
                             <span className="cu-pagination-pages">{currentPage} of {totalPages} pages</span>
                             <div className="ae-d-flex ae-justify-center ae-mt-12 ae-gap-16">
                                 <button

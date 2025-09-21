@@ -11,7 +11,7 @@
 
 .cu-watchlist-table-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 0.1fr;
     /* adjust as needed */
     align-items: center;
     gap: 16px;
@@ -34,9 +34,32 @@
     color: var(--dark-fg-subtle-color);
     line-height: 20px;
 }
+.cu-watchlist-table-holding-cell{
+    width: 150px;
+}
 
 .cu-watchlist-table-data-cell {
     line-height: 20px;
+}
+
+.cu-holding-input{
+    border: none;
+    border-radius: 8px;
+    color: var(--muted-color);
+    padding: 6px 12px;
+    width: 90px;
+    font-size: 16px;
+    flex: 1;
+
+    background:  #FFFFFF0A;
+
+    box-shadow: 0px 0px 0px 4px #A9E85133,
+        0px 0px 0px 1px #A9E851;
+
+}
+
+.cu-holding-input:focus-visible{
+    outline: none;
 }
 
 .cu-token-logo {
