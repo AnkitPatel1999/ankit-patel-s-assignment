@@ -22,13 +22,13 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | []>([]);
+    const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | null>(null);
 
     useEffect(() => {
         setIsLoading(true);
         fetchTrendingCoins().then((res) => {
             setIsLoading(false);
-            if (res && Array.isArray(res.coins) && res.coins.length > 0) {
+            if (res && !Array.isArray(res) && 'coins' in res && Array.isArray(res.coins) && res.coins.length > 0) {
                 setTrendingCoins(res);
             }
         }).catch((err) => {
@@ -66,7 +66,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                     )}
 
 
-                    {trendingCoins.coins && trendingCoins?.coins.map((coin) => (
+                    {trendingCoins && trendingCoins.coins && trendingCoins.coins.map((coin) => (
                         <div className="cu-modal-token-row" key={`Coin-modal-${coin.item.coin_id}`}>
                             <img 
                                 src={coin.item.small} 
