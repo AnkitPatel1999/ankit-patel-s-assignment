@@ -72,12 +72,13 @@
     align-items: center;
     gap: 12px;
     font-size: var(--fs-sm);
-    padding: 6px 6px;
+    padding: 8px;
     margin: 0 6px;
     cursor: pointer;
     transition: background 0.2s;
     line-height: 20px;
     font-weight: var(--fw-400);
+    margin-bottom: 1px;
 }
 
 .cu-modal-pending-error-nodata-row{
@@ -95,35 +96,92 @@
 }
 
 .cu-modal-token-row:hover,
-.cu-modal-token-row.selected {
+.cu-modal-token-row.checked {
     background: #27272A;
     border-radius: 6px;
 }
 
-.cu-modal-token-row.selected {
+.cu-modal-token-row.checked {
     background: #A9E8510F;
 }
+
 
 .cu-modal-pending-error-nodata-row:hover{
     color:unset;
 }
 
 .cu-modal-token-logo {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border-radius: 4px;
     background: var(--backgrounds-bg-base, #212124);
     box-shadow: 0px 0px 0px 1px #00000014, 0px 1px 2px 0px #0000001F;
     padding: 2px;
 }
 
-.cu-modal-radio {
+
+/* Custom round checkbox */
+
+/* Custom round checkbox: visually hidden input + styled span */
+.cu-modal-checkbox-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.cu-modal-token-star{
+    width: 10.7px;
+    height: 10.22px;
+}
+.cu-modal-checkbox {
     margin-left: auto;
-    width: 12px;
-    height: 12px;
+    width: 8.5px;
+    height: 8.5px;
     border-radius: 50%;
     border: 2px solid #A1A1AA;
+    background: #23272F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+}
+
+.cu-modal-token-row.checked .cu-modal-checkbox {
+    border-color: var(--green-color);
+    background: var(--green-color);
+}
+
+
+.cu-modal-token-row.checked .cu-modal-checkbox::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    display: block;
     background: none;
+}
+
+.cu-modal-token-row.checked .cu-modal-checkbox svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    pointer-events: none;
+    fill: #18181B;
+    stroke: #18181B;
+    stroke-width: 2.5;
+}
+
+.cu-modal-checkedbox{
+    display: flex ; gap: 14px; align-items: center;
 }
 
 .cu-modal-footer {

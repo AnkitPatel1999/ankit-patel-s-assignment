@@ -79,6 +79,16 @@ body {
   font-family: var(--font-family-inter);
 }
 
+.ae-btn-disabled{
+  /* box-shadow:  0px 0px 1px #FFFFFF1A,
+    0px 1px 2px 0px #FFFFFF1A,
+    0px 0.75px 0px 0px #FFFFFF1A inset; */
+  box-shadow: inset 0 0 0 1px #FFFFFF1A;
+  /* border: 1px solid var(--borders-border-base, #FFFFFF1A); */
+  background: transparent;
+  color: var(--foregrounds-fg-disabled, #52525B);
+}
+
 .ae-btn-green{
   box-shadow: 0px 0px 0px 1px #1F6619,
   0px 1px 2px 0px #1F661966,
