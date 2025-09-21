@@ -54,9 +54,16 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
 
 
 
-                    {trendingCoins?.coins.map((coin, idx) => (
+                    {trendingCoins?.coins.map((coin) => (
                         <div className="cu-modal-token-row" key={`Coin-modal-${coin.item.coin_id}`}>
-                            <img src={coin.item.small} alt={coin.item.name} className="cu-modal-token-logo" />
+                            <img 
+                                src={coin.item.small} 
+                                alt={coin.item.name} 
+                                className="cu-modal-token-logo" 
+                                onError={(e) => {
+                                    (e.currentTarget as HTMLImageElement).src =
+                                        "https://ui-avatars.com/api/?name=" + encodeURIComponent(coin.item.symbol) + "&background=random&size=32"; // fallback image
+                                }} />
                             <span className='cu-modal-token-name'>{coin.item.name} ({coin.item.symbol})</span>
                             <span className="cu-modal-radio" />
                         </div>
