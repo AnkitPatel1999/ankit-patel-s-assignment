@@ -1,8 +1,11 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
 import './CoinModal.css';
 import { fetchTrendingCoins } from '../../utilities/coingecko-api';
-import type { TrendingResponse } from '../../dto/coingecko-types';
+import type {  TrendingResponse } from '../../dto/coingecko-types';
 import star from "./../../assets/star.svg";
+import { useDispatch } from 'react-redux';
+import { addToWatchList } from '../../features/watchlist/watchlist-slice';
+
 
 interface CoinModalProps {
     open: boolean;
@@ -25,6 +28,27 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
     const [error, setError] = useState<string | null>(null);
     const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | null>(null);
     const [selectedCoinIds, setSelectedCoinIds] = useState<number[]>([]);
+
+    const watchlistDispatch = useDispatch();
+
+    const handleAddToWishlist = () => {
+        if (!trendingCoins || !trendingCoins.coins) return;
+        const selectedCoins = trendingCoins.coins
+            .filter(coin => selectedCoinIds.includes(coin.item.coin_id))
+            .map(coin => ({
+                small: coin.item.small,
+                name: coin.item.name,
+                symbol: coin.item.symbol,
+                price: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price),
+                price_change_percentage_24h: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price_change_percentage_24h.aed),
+                sparkline: coin.item.data.sparkline,
+                total_volume: coin.item.data.total_volume,  
+                total_volume_btc: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.total_volume_btc),
+
+            }));
+        console.log("selectedCoins", selectedCoins);
+        watchlistDispatch(addToWatchList(selectedCoins));
+    }
 
     useEffect(() => {
         setIsLoading(true);
@@ -111,7 +135,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                     })}
                 </div>
                 <div className="cu-modal-footer">
-                    <button className={selectedCoinIds.length === 0? 'ae-btn ae-btn-disabled ae-radius-6' : 'ae-btn ae-btn-green ae-radius-6'} disabled={selectedCoinIds.length === 0}>
+                    <button onClick={handleAddToWishlist} className={selectedCoinIds.length === 0? 'ae-btn ae-btn-disabled ae-radius-6' : 'ae-btn ae-btn-green ae-radius-6'} disabled={selectedCoinIds.length === 0}>
                         <div className="ae-btn-text">Add to Wishlist</div>
                     </button>
                 </div>

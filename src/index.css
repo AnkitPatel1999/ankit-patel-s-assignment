@@ -180,6 +180,11 @@ body {
 .ae-justify-space-between {
   justify-content: space-between;
 }
+
+.ae-justify-content-right {
+  justify-content: right;
+}
+
 .ae-align-center {
   align-items: center;
 }

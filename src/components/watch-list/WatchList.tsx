@@ -7,6 +7,7 @@ import trash from '../../assets/trash.svg';
 import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 import CoinModal from '../modals/CoinModal';
+import { useSelector } from 'react-redux';
 
 
 export default function WatchList() {
@@ -25,6 +26,7 @@ export default function WatchList() {
     const endResult = Math.min(currentPage * pageSize, totalResults);
 
 
+    const coinsWatchlist = useSelector((state: any) => state.watchlist);
 
     
     // Close dropdown on click outside or inside
@@ -78,41 +80,48 @@ export default function WatchList() {
                         <div className='cu-watchlist-table-header-cell'></div>
                     </div>
                     <div className='cu-watchlist-table-body'>
-                        <div className='cu-watchlist-table-row'>
-                            <div className='cu-watchlist-table-data-cell ae-d-flex ae-align-center ae-gap-12'>
-                                <img className='cu-token-logo' src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png" alt="Bitcoin" />
-                                <div>Bitcoin <span className='ae-dark-fg-subtle-color'>(BTC)</span></div>
-                            </div>
-                            <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color'>$27,000.00</div>
-                            <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color cu-positive-change'>+2.5%</div>
-                            <div className='cu-watchlist-table-data-cell'>$500B</div>
-                            <div className='cu-watchlist-table-data-cell'>$30B</div>
-                            <div className='cu-watchlist-table-data-cell'>18.7M BTC</div>
-                            <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-flex-end'>
-                                <div className="cu-more-options-wrapper" style={{ position: 'relative' }} ref={dropdownRef}>
-                                    <img
-                                        src={ellipsis_horizontal}
-                                        alt="More Options"
-                                        className='cu-more-options-icon'
-                                        style={{ cursor: 'pointer' }}
-                                        onClick={e => {
-                                            e.stopPropagation();
-                                            setShowDropdown(show => !show);
-                                        }}
-                                    />
-                                    {showDropdown && (
-                                        <div className="cu-options-dropdown">
-                                            <button className="cu-options-dropdown-item cu-options-edit" tabIndex={0} onClick={() => setShowDropdown(false)}>
-                                                <img src={pencil_square} alt='Edit Holdings' className="cu-options-edit-icon" />Edit Holdings
-                                            </button>
-                                            <button className="cu-options-dropdown-item cu-options-remove" tabIndex={0} onClick={() => setShowDropdown(false)}>
-                                                <img src={trash} alt='Remove' className="cu-options-remove-icon" />Remove
-                                            </button>
-                                        </div>
-                                    )}
+
+                        { coinsWatchlist && coinsWatchlist.map((coin: any, index: number) => (
+                            <div className='cu-watchlist-table-row'>
+                                <div className='cu-watchlist-table-data-cell ae-d-flex ae-align-center ae-gap-12'>
+                                    <img className='cu-token-logo' src={coin.small} alt={coin.name} />
+                                    <div>{coin.name} <span className='ae-dark-fg-subtle-color'>({coin.symbol})</span></div>
+                                </div>
+                                <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color'>{coin.price}</div>
+                                <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color cu-positive-change'>{coin.price_change_percentage_24h}</div>
+                                <div className='cu-watchlist-table-data-cell'><img className='cu-watchlist-sparkline-img' src={coin.sparkline} alt={coin.name} /></div>
+                                <div className='cu-watchlist-table-data-cell'>{coin.total_volume}</div>
+                                <div className='cu-watchlist-table-data-cell'>{coin.total_volume_btc}</div>
+                                <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-content-right'>
+                                    <div className="cu-more-options-wrapper" style={{ position: 'relative' }} ref={dropdownRef}>
+                                        <img
+                                            src={ellipsis_horizontal}
+                                            alt="More Options"
+                                            className='cu-more-options-icon'
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                setShowDropdown(show => !show);
+                                            }}
+                                        />
+                                        {showDropdown && (
+                                            <div className="cu-options-dropdown">
+                                                <button className="cu-options-dropdown-item cu-options-edit" tabIndex={0} onClick={() => setShowDropdown(false)}>
+                                                    <img src={pencil_square} alt='Edit Holdings' className="cu-options-edit-icon" />Edit Holdings
+                                                </button>
+                                                <button className="cu-options-dropdown-item cu-options-remove" tabIndex={0} onClick={() => setShowDropdown(false)}>
+                                                    <img src={trash} alt='Remove' className="cu-options-remove-icon" />Remove
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+                            ))
+                        }
+
+
                     </div>
                     {/* Pagination Info & Controls */}
                     <div className="cu-pagination-info ae-d-flex ae-justify-space-between ae-align-center ae-mt-24">
