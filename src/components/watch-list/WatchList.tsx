@@ -8,11 +8,12 @@ import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 import CoinModal from '../modals/CoinModal';
 import { useSelector } from 'react-redux';
+import { loadWatchlist } from '../../utilities/watchlist';
 
 
 export default function WatchList() {
     const [showCoinModal, setShowCoinModal] = useState(false);
-    const coinsWatchlist = useSelector((state: any) => state.watchlist);
+    let coinsWatchlist = useSelector((state: any) => state.watchlist);
     const pageSize = 10;
     const totalResults = coinsWatchlist.length;
     const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
@@ -29,6 +30,10 @@ export default function WatchList() {
 
     const paginatedCoins = coinsWatchlist.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
+    const onRefresh = () => {
+        loadWatchlist();
+        setCurrentPage(1);
+    }
     
     // Close dropdown on click outside or inside
     useEffect(() => {
@@ -59,7 +64,7 @@ export default function WatchList() {
                     <span>WatchList</span>
                 </div>
                 <div className='ae-d-flex ae-gap-12'>
-                    <button className='ae-btn ae-btn-dark ae-radius-6 ae-d-flex ae-gap-5'>
+                    <button onClick={onRefresh} className='ae-btn ae-btn-dark ae-radius-6 ae-d-flex ae-gap-5'>
                         <img className='ae-btn-icon' src={cached} alt="Refresh" />
                         <div className="ae-btn-text ae-white-fg-base-color hidden-phone">Refresh Prices</div>
                     </button>

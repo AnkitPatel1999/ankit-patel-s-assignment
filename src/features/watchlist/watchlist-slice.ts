@@ -1,26 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
+import type { WatchListItem } from "../../dto/coingecko-types"
+import { loadWatchlist } from "../../utilities/watchlist"
 
-interface WatchListItem {
-    small: string,
-    name: string,
-    symbol: string,
-    price: string,
-    price_change_percentage_24h: string,
-    sparkline: string,
-    total_volume: string,
-    total_volume_btc: string
-}
 
-// Load from localStorage
-function loadWatchlist(): WatchListItem[] {
-    try {
-        const data = localStorage.getItem('watchlist');
-        if (data) return JSON.parse(data);
-    } catch {}
-    return [];
-}
-    
+
 export const WatchList = createSlice({
     name: 'watchlist',
     initialState: loadWatchlist(),
