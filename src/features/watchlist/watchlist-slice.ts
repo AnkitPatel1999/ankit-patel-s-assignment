@@ -55,15 +55,10 @@ export const WatchList = createSlice({
                     const holdingNum = parseFloat(item.holding || '0') || 0;
                     const currentPrice = priceInfo.current_price;
                     const value = holdingNum * currentPrice;
-                    console.log("Price Info:", priceInfo);
-                    // Generate sparkline URL from price data
-                    const sparklineUrl = `https://www.coingecko.com/coins/${priceInfo.id}/sparkline.svg`;
-                    
                     return {
                         ...item,
                         price: `$${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
                         price_change_percentage_24h: `${priceInfo.price_change_percentage_24h >= 0 ? '+' : ''}${priceInfo.price_change_percentage_24h.toFixed(2)}%`,
-                        sparkline: sparklineUrl,
                         total_volume: `$${priceInfo.total_volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
                         currentPrice,
                         value
