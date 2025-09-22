@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import type { WatchListItem } from "../../dto/coingecko-types"
 import { loadWatchlist } from "../../utilities/watchlist"
+import type { CoinPriceData } from "../../dto/coingecko-types"
 
 
 
@@ -19,6 +20,7 @@ export const WatchList = createSlice({
             } catch {}
             return updated;
         },
+
         removeFromWatchList: (state, action: PayloadAction<{ symbol: string }>) => {
             const updated = state.filter(item => item.symbol !== action.payload.symbol);
             console.log("Updated Watchlist:", updated);
@@ -27,11 +29,48 @@ export const WatchList = createSlice({
             } catch {}
             return updated;
         },
+
         updateHolding: (state, action: PayloadAction<{ symbol: string, holding: string }>) => {
             const { symbol, holding } = action.payload;
-            const updated = state.map(item =>
-                item.symbol === symbol ? { ...item, holding } : item
-            );
+            const updated = state.map(item => {
+                if (item.symbol === symbol) {
+                    const holdingNum = parseFloat(holding) || 0;
+                    const currentPrice = item.currentPrice || parseFloat(item.price.replace(/[$,]/g, '')) || 0;
+                    const value = holdingNum * currentPrice;
+                    return { ...item, holding, value, currentPrice };
+                }
+                return item;
+            });
+            try {
+                localStorage.setItem('watchlist', JSON.stringify(updated));
+            } catch {}
+            return updated;
+        },
+
+        updatePrices: (state, action: PayloadAction<CoinPriceData[]>) => {
+            const priceData = action.payload;
+            const updated = state.map(item => {
+                const priceInfo = priceData.find(p => p.symbol.toLowerCase() === item.symbol.toLowerCase());
+                if (priceInfo) {
+                    const holdingNum = parseFloat(item.holding || '0') || 0;
+                    const currentPrice = priceInfo.current_price;
+                    const value = holdingNum * currentPrice;
+                    console.log("Price Info:", priceInfo);
+                    // Generate sparkline URL from price data
+                    const sparklineUrl = `https://www.coingecko.com/coins/${priceInfo.id}/sparkline.svg`;
+                    
+                    return {
+                        ...item,
+                        price: `$${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
+                        price_change_percentage_24h: `${priceInfo.price_change_percentage_24h >= 0 ? '+' : ''}${priceInfo.price_change_percentage_24h.toFixed(2)}%`,
+                        sparkline: sparklineUrl,
+                        total_volume: `$${priceInfo.total_volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                        currentPrice,
+                        value
+                    };
+                }
+                return item;
+            });
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch {}
@@ -40,5 +79,5 @@ export const WatchList = createSlice({
     }
 });
 
-export const { addToWatchList, removeFromWatchList, updateHolding } = WatchList.actions;
+export const { addToWatchList, removeFromWatchList, updateHolding, updatePrices } = WatchList.actions;
 export default WatchList.reducer;

@@ -8,8 +8,9 @@ import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 import CoinModal from '../modals/CoinModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromWatchList, updateHolding } from '../../features/watchlist/watchlist-slice';
-import { loadWatchlist } from '../../utilities/watchlist';
+import { removeFromWatchList, updateHolding, updatePrices } from '../../features/watchlist/watchlist-slice';
+import { getCoinGeckoIds, formatCurrency } from '../../utilities/watchlist';
+import { fetchCoinPrices } from '../../utilities/coingecko-api';
 
 
 function WatchList() {
@@ -55,9 +56,25 @@ function WatchList() {
         };
     }, [openDropdownIndex]);
 
-    const onRefresh = () => {
-        loadWatchlist();
-        setCurrentPage(1);
+    const onRefresh = async () => {
+        setIsLoading(true);
+        try {
+            // Get all coin symbols from watchlist
+            const symbols = coinsWatchlist.map((coin: any) => coin.symbol);
+            const coinIds = getCoinGeckoIds(symbols);
+            
+            // Fetch current prices from CoinGecko
+            const priceData = await fetchCoinPrices(coinIds);
+            
+            // Update prices and recalculate values
+            dispatch(updatePrices(priceData));
+            
+            setCurrentPage(1);
+        } catch (error) {
+            console.error('Failed to refresh prices:', error);
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     const handlePageChange = (page: number) => {
@@ -218,7 +235,9 @@ function WatchList() {
                                         </div>
                                     )}
                                 </div>
-                                <div className='cu-watchlist-table-data-cell'>{coin.total_volume_btc}</div>
+                                <div className='cu-watchlist-table-data-cell'>
+                                    {coin.value ? formatCurrency(coin.value) : '$0.00'}
+                                </div>
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-justify-content-right'>
                                     <div
                                         className="cu-more-options-wrapper"
