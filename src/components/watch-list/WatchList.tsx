@@ -130,7 +130,7 @@ function WatchList() {
 
     return (
         <>
-            <div className='cu-saperator'></div>
+            <div><div className='ae-d-flex ae-align-center cu-saperator'></div></div>
             <div className='ae-d-flex ae-justify-space-between ae-mt-48 ae-m-py-24'>
                 <div className='ae-d-flex ae-align-center ae-gap-8 cu-watchlist-header'>
                     <img src={star} alt="Star" />
