@@ -31,14 +31,7 @@ export async function searchCoins(query: string): Promise<CoinPriceData[]> {
     const searchData: SearchResponse = await searchRes.json();
     if (!searchData.coins?.length) return [];
     
-    // Get detailed price data for the first 20 results
+    // Get detailed price data using existing fetchCoinPrices function
     const coinIds = searchData.coins.slice(0, 20).map(coin => coin.id);
-    const ids = coinIds.join(',');
-    
-    const priceRes = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${ids}&order=market_cap_desc&per_page=20&page=1&sparkline=true&price_change_percentage=24h`
-    );
-    
-    if (!priceRes.ok) throw new Error("Failed to fetch coin prices");
-    return priceRes.json();
+    return fetchCoinPrices(coinIds);
 }

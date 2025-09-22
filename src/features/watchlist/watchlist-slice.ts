@@ -53,13 +53,13 @@ export const WatchList = createSlice({
                 const priceInfo = priceData.find(p => p.symbol.toLowerCase() === item.symbol.toLowerCase());
                 if (priceInfo) {
                     const holdingNum = parseFloat(item.holding || '0') || 0;
-                    const currentPrice = priceInfo.current_price;
+                    const currentPrice = Number(priceInfo.current_price);
                     const value = holdingNum * currentPrice;
                     return {
                         ...item,
-                        price: `$${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
-                        price_change_percentage_24h: `${priceInfo.price_change_percentage_24h >= 0 ? '+' : ''}${priceInfo.price_change_percentage_24h.toFixed(2)}%`,
-                        total_volume: `$${priceInfo.total_volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                        price: `$${Number(currentPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
+                        price_change_percentage_24h: `${Number(priceInfo.price_change_percentage_24h) >= 0 ? '+' : ''}${Number(priceInfo.price_change_percentage_24h).toFixed(2)}%`,
+                        total_volume: `$${Number(priceInfo.total_volume).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
                         currentPrice,
                         value
                     };

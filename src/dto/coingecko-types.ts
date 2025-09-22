@@ -51,7 +51,8 @@ export interface coinsForDoughnutChart {
     sparkline_in_7d: string;
     total_volume: string;
     image: string;
-}
+    market_cap_rank: number;
+  }
 
 
 export interface SearchResult {
