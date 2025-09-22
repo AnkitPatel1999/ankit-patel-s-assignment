@@ -202,6 +202,7 @@
         border-radius: 100px;
         height: 5px;
         justify-self: center;
+        place-self: anchor-center;
     }
 
     .cu-watchlist-header span {
