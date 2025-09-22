@@ -10,11 +10,9 @@ ChartJS.register(ArcElement, Tooltip);
 
 export default function DoughnutChart({token_names}: { token_names: { name: string; value: number; color: string; short_form: string }[] }) {
 
-
     const names = token_names.map((token: { name: string; value: number; color: string; short_form: string }) => {return token.name + " (" + token.short_form + ")"});
     const values = token_names.map((token: { name: string; value: number; color: string }) => token.value);
     const colors = token_names.map((token: { name: string; value: number; color: string }) => token.color);
-
     const data = {
         labels: names,
         datasets: [

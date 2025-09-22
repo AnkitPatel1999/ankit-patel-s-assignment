@@ -10,29 +10,22 @@ export default function Hero() {
   const [portfolioTotal, setPortfolioTotal] = useState<string>("$000");
   let coinsWatchlist = useSelector((state: any) => state.watchlist);
 
-  // colors for the chart
-  const chartColors = [
-    "#10B981", "#A78BFA", "#60A5FA", "#18C9DD", "#FB923C", "#FB7185",
-    "#B9FF66", "#FFD700", "#FFB6C1", "#00CED1", "#FF7F50", "#7FFF00",
-    "#FF69B4", "#6495ED", "#FF4500", "#40E0D0", "#DA70D6", "#32CD32",
-    "#FFDAB9", "#BA55D3", "#87CEEB", "#FF6347", "#3CB371", "#FF1493",
-    "#1E90FF", "#ADFF2F", "#FF8C00", "#20B2AA", "#9370DB", "#98FB98"
-  ];
-
 
   const computedCoins = (coinsWatchlist || []).map((coin: any, idx: number): coinsForDoughnutChart => {
     const price = Number(coin.price?.replace(/[$,]/g, "")) || 0;
     const holding = Number(coin.holding ?? 0);
     const value = price * holding;
+
     return {
       name: coin.name,
       short_form: coin.symbol,
       value,
-      color: chartColors[idx % chartColors.length],
+      color: coin.chart_color,
       holding,
       price,
     };
   }).filter((token: coinsForDoughnutChart) => token.value > 0);
+  console.log("computedCoins ",computedCoins)
 
   const totalOfPortfolio = computedCoins.reduce((acc: number, token: coinsForDoughnutChart) => acc + token.value, 0);
 

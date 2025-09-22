@@ -53,6 +53,12 @@
 .cu-token-name-container {
     flex: 1;
     gap: 16px;
+    height: 200px;
+    overflow: auto;
+}
+
+.cu-hero-token-percentage{
+    margin-right: 5px;
 }
 
 .cu-hero-token-name {

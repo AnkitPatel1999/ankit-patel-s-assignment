@@ -35,7 +35,6 @@ function WatchList() {
 
 
     const paginatedCoins = coinsWatchlist.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    console.log("paginatedCoins ", paginatedCoins)
 
     // Close dropdown on click outside for the open dropdown only
     useEffect(() => {

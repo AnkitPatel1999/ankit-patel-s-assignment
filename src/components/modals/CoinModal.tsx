@@ -20,6 +20,13 @@ interface CoinModalProps {
 //     { name: 'Stader', symbol: 'SD', img: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4.png' },
 // ];
 
+const chartColors = [
+    "#10B981", "#A78BFA", "#60A5FA", "#18C9DD", "#FB923C", "#FB7185",
+    "#B9FF66", "#FFD700", "#FFB6C1", "#00CED1", "#FF7F50", "#7FFF00",
+    "#FF69B4", "#6495ED", "#FF4500", "#40E0D0", "#DA70D6", "#32CD32",
+    "#FFDAB9", "#BA55D3", "#87CEEB", "#FF6347", "#3CB371", "#FF1493",
+    "#1E90FF", "#ADFF2F", "#FF8C00", "#20B2AA", "#9370DB", "#98FB98"
+];
 
 export default function CoinModal({ open, onClose }: CoinModalProps) {
     if (!open) return null;
@@ -33,20 +40,31 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
 
     const handleAddToWishlist = () => {
         if (!trendingCoins || !trendingCoins.coins) return;
+        // Get already used colors from current watchlist (if available)
+        let usedColors: string[] = [];
+        try {
+            const watchlist = JSON.parse(localStorage.getItem('watchlist') || '[]');
+            usedColors = watchlist.map((coin: any) => coin.chart_color || coin.chartColor).filter(Boolean);
+        } catch {}
+
         const selectedCoins = trendingCoins.coins
             .filter(coin => selectedCoinIds.includes(coin.item.coin_id))
-            .map(coin => ({
-                small: coin.item.small,
-                name: coin.item.name,
-                symbol: coin.item.symbol,
-                price: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price),
-                price_change_percentage_24h: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price_change_percentage_24h.aed),
-                sparkline: coin.item.data.sparkline,
-                total_volume: coin.item.data.total_volume,  
-                total_volume_btc: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.total_volume_btc),
-
-            }));
-        console.log("selectedCoins", selectedCoins);
+            .map(coin => {
+                // Find next unused color
+                let chartColor = chartColors.find(c => !usedColors.includes(c)) || chartColors[0];
+                usedColors.push(chartColor);
+                return {
+                    small: coin.item.small,
+                    name: coin.item.name,
+                    symbol: coin.item.symbol,
+                    price: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price),
+                    price_change_percentage_24h: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price_change_percentage_24h.aed),
+                    sparkline: coin.item.data.sparkline,
+                    total_volume: coin.item.data.total_volume,  
+                    total_volume_btc: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.total_volume_btc),
+                    chart_color: chartColor,
+                };
+            });
         watchlistDispatch(addToWatchList(selectedCoins));
         onClose();
     }
