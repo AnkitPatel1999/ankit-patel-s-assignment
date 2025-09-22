@@ -12,7 +12,7 @@ export default function Hero() {
   let lastUpdated = useSelector((state: any) => state.watchlist.lastUpdated);
 
 
-  const computedCoins = (coinsWatchlist || []).map((coin: any, idx: number): coinsForDoughnutChart => {
+  const computedCoins = (coinsWatchlist || []).map((coin: any): coinsForDoughnutChart => {
     const price = Number(coin.price?.replace(/[$,]/g, "")) || 0;
     const holding = Number(coin.holding ?? 0);
     const value = price * holding;

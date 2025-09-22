@@ -11,11 +11,24 @@ import '@fontsource/inter/700.css';
 import { Provider } from 'react-redux';
 import store from './store/store.ts';
 
+import '@rainbow-me/rainbowkit/styles.css';
+import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { config } from './config/wagmi';
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   </StrictMode>,
 )

@@ -10,11 +10,20 @@ export const WatchList = createSlice({
     name: 'watchlist',
     initialState: {
         coins: loadWatchlist(),
-        lastUpdated: null as Date | null
+        lastUpdated: null as Date | null,
+        wallet: {
+            isConnected: false,
+            address: null as string | null,
+            chainId: null as number | null
+        }
     },
     reducers: {
         setLastUpdated: (state) => {
             state.lastUpdated = new Date();
+        },
+
+        setWalletConnection: (state, action: PayloadAction<{ isConnected: boolean, address: string | null, chainId: number | null }>) => {
+            state.wallet = action.payload;
         },
 
         addToWatchList: (state, action: PayloadAction<WatchListItem[]>) => {
@@ -86,5 +95,5 @@ export const WatchList = createSlice({
     }
 });
 
-export const { addToWatchList, removeFromWatchList, updateHolding, updatePrices, setLastUpdated } = WatchList.actions;
+export const { addToWatchList, removeFromWatchList, updateHolding, updatePrices, setLastUpdated, setWalletConnection } = WatchList.actions;
 export default WatchList.reducer;
