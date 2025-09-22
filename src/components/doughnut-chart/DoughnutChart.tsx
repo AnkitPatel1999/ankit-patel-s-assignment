@@ -32,7 +32,7 @@ export default function DoughnutChart({token_names}: { token_names: { name: stri
         responsive: true,
         plugins: {
             legend: {
-                position: "bottom" as const,
+                display: false,
             },
         },
     };

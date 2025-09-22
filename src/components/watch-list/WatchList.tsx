@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeFromWatchList, updateHolding, updatePrices } from '../../features/watchlist/watchlist-slice';
 import { getCoinGeckoIds, formatCurrency } from '../../utilities/watchlist';
 import { fetchCoinPrices } from '../../utilities/coingecko-api';
+import SparklineChart from '../sparkline-chart/SparklineChart';
 
 
 function WatchList() {
@@ -69,7 +70,7 @@ function WatchList() {
             // Update prices and recalculate values
             dispatch(updatePrices(priceData));
             
-            setCurrentPage(1);
+            // setCurrentPage(1);
         } catch (error) {
             console.error('Failed to refresh prices:', error);
         } finally {
@@ -204,7 +205,18 @@ function WatchList() {
                                 </div>
                                 <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color'>{coin.price}</div>
                                 <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color cu-positive-change'>{coin.price_change_percentage_24h}</div>
-                                <div className='cu-watchlist-table-data-cell'><img className='cu-watchlist-sparkline-img' src={coin.sparkline} alt={coin.name} /></div>
+                                <div className='cu-watchlist-table-data-cell'>
+                                    {coin.sparklineData && coin.sparklineData.length > 0 ? (
+                                        <SparklineChart 
+                                            data={coin.sparklineData} 
+                                            color={coin.price_change_percentage_24h?.includes('+') ? '#10B981' : '#EF4444'}
+                                            width={75}
+                                            height={28}
+                                        />
+                                    ) : (
+                                        <img className='cu-watchlist-sparkline-img' src={coin.sparkline} alt={coin.name} />
+                                    )}
+                                </div>
                                 <div className='cu-watchlist-table-data-cell cu-watchlist-table-holding-cell '>
                                     {editingCoin === coin.symbol ? (
                                         <div className='ae-d-flex ae-align-center ae-gap-8'>

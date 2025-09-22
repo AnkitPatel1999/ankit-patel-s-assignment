@@ -109,14 +109,17 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
         searchResults
             ?.filter(coin => selectedCoinIds.includes(coin.market_cap_rank || 0))
             ?.forEach(coin => {
+                // Store sparkline data for Chart.js
+                const sparklineData = coin.sparkline_in_7d?.price || [];
                 selectedCoins.push({
                     small: coin.image,
                     name: coin.name,
                     symbol: coin.symbol,
-                    price: `$${coin.current_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
-                    price_change_percentage_24h: `${coin.price_change_percentage_24h >= 0 ? '+' : ''}${coin.price_change_percentage_24h.toFixed(2)}%`,
-                    sparkline: `https://www.coingecko.com/coins/${coin.id}/sparkline.svg`,
-                    total_volume: `$${coin.total_volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                    price: `$${Number(coin.current_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
+                    price_change_percentage_24h: `${Number(coin.price_change_percentage_24h) >= 0 ? '+' : ''}${Number(coin.price_change_percentage_24h).toFixed(2)}%`,
+                    sparkline: '', // Empty sparkline URL
+                    sparklineData: sparklineData, // Add sparkline data for Chart.js
+                    total_volume: `$${Number(coin.total_volume).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
                     total_volume_btc: '0.00',
                     chart_color: getNextColor(),
                 });

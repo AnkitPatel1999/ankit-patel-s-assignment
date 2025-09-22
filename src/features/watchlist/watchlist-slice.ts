@@ -55,10 +55,14 @@ export const WatchList = createSlice({
                     const holdingNum = parseFloat(item.holding || '0') || 0;
                     const currentPrice = Number(priceInfo.current_price);
                     const value = holdingNum * currentPrice;
+                    // Store sparkline data array for Chart.js
+                    const sparklineData = priceInfo.sparkline_in_7d?.price || item.sparklineData || [];
                     return {
                         ...item,
                         price: `$${Number(currentPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
                         price_change_percentage_24h: `${Number(priceInfo.price_change_percentage_24h) >= 0 ? '+' : ''}${Number(priceInfo.price_change_percentage_24h).toFixed(2)}%`,
+                        sparkline: item.sparkline, // Keep existing sparkline URL
+                        sparklineData: sparklineData, // Add sparkline data for Chart.js
                         total_volume: `$${Number(priceInfo.total_volume).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
                         currentPrice,
                         value

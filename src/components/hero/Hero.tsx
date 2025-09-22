@@ -51,7 +51,7 @@ export default function Hero() {
             </div>
             <div className="ae-d-flex ae-f-column cu-token-name-container">
               {computedCoins.map((token: coinsForDoughnutChart, index: number) => (
-                <div key={index} className="ae-d-flex ae-justify-space-between ae-align-center cu-hero-token-row">
+                <div key={index} className="ae-d-flex ae-justify-space-between ae-align-center cu-hero-token-row ae-gap-10">
                   <div className="ae-d-flex ae-align-center ae-gap-10">
                     <div className="cu-hero-token-name" style={{ color: token.color }}>{token.name} ({token.short_form})</div>
                   </div>

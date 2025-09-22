@@ -25,6 +25,7 @@ export interface WatchListItem {
     price: string,
     price_change_percentage_24h: string,
     sparkline: string,
+    sparklineData?: number[],
     total_volume: string,
     total_volume_btc: string,
     holding?: string,
