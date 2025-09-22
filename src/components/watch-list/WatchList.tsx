@@ -196,7 +196,7 @@ function WatchList() {
                             </div>
                         )}
 
-                        {!isLoading &&paginatedCoins && paginatedCoins.map((coin: any, index: number) => (
+                        {!isLoading && paginatedCoins && paginatedCoins.map((coin: any, index: number) => (
                             <div className='cu-watchlist-table-row' key={coin.symbol + index}>
                                 <div className='cu-watchlist-table-data-cell ae-d-flex ae-align-center ae-gap-12'>
                                     <img className='cu-token-logo' src={coin.small} alt={coin.name} />

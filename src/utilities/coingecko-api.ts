@@ -1,4 +1,4 @@
-import type { TrendingResponse,CoinPriceData } from "../dto/coingecko-types";
+import type { TrendingResponse,CoinPriceData, SearchResponse } from "../dto/coingecko-types";
 
 export async function fetchTrendingCoins(): Promise<TrendingResponse> {
     const res = await fetch("https://api.coingecko.com/api/v3/search/trending");
@@ -17,5 +17,15 @@ export async function fetchCoinPrices(coinIds: string[]): Promise<CoinPriceData[
     );
 
     if (!res.ok) throw new Error("Failed to fetch coin prices");
+    return res.json();
+}
+
+
+export async function searchCoins(query: string): Promise<SearchResponse> {
+    if (!query.trim()) return { coins: [] };
+    
+    const res = await fetch(`https://api.coingecko.com/api/v3/search?query=${encodeURIComponent(query)}`);
+    
+    if (!res.ok) throw new Error("Failed to search coins");
     return res.json();
 }

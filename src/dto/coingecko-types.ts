@@ -54,3 +54,17 @@ export interface coinsForDoughnutChart {
     total_volume: number;
     image: string;
 }
+
+
+export interface SearchResult {
+    id: string;
+    name: string;
+    symbol: string;
+    market_cap_rank: number;
+    thumb: string;
+    large: string;
+}
+
+export interface SearchResponse {
+    coins: SearchResult[];
+}
