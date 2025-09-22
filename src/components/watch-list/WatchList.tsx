@@ -89,7 +89,6 @@ function WatchList() {
     };
 
     const removeWatchlist = (symbol: string) => {
-        console.log("Removing from watchlist:", symbol);
         dispatch(removeFromWatchList({ symbol }));
         setOpenDropdownIndex(null);
     }

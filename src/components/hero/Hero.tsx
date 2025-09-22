@@ -26,7 +26,6 @@ export default function Hero() {
       price,
     };
   }).filter((token: coinsForDoughnutChart) => token.value > 0);
-  console.log("computedCoins ",computedCoins)
 
   const totalOfPortfolio = computedCoins.reduce((acc: number, token: coinsForDoughnutChart) => acc + token.value, 0);
 

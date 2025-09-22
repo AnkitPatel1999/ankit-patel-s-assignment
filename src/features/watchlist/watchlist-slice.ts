@@ -39,7 +39,7 @@ export const WatchList = createSlice({
 
         removeFromWatchList: (state, action: PayloadAction<{ symbol: string }>) => {
             const updated = state.coins.filter(item => item.symbol !== action.payload.symbol);
-            console.log("Updated Watchlist:", updated);
+
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch { }
