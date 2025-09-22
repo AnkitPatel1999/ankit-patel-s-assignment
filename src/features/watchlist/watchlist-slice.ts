@@ -8,31 +8,38 @@ import type { CoinPriceData } from "../../dto/coingecko-types"
 
 export const WatchList = createSlice({
     name: 'watchlist',
-    initialState: loadWatchlist(),
+    initialState: {
+        coins: loadWatchlist(),
+        lastUpdated: null as Date | null
+    },
     reducers: {
+        setLastUpdated: (state) => {
+            state.lastUpdated = new Date();
+        },
+
         addToWatchList: (state, action: PayloadAction<WatchListItem[]>) => {
             // Add only unique coins by symbol
-            const existingSymbols = new Set(state.map(item => item.symbol));
+            const existingSymbols = new Set(state.coins.map(item => item.symbol));
             const newCoins = action.payload.filter(item => !existingSymbols.has(item.symbol));
-            const updated = [...state, ...newCoins];
+            const updated = [...state.coins, ...newCoins];
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch {}
-            return updated;
+            state.coins = updated;
         },
 
         removeFromWatchList: (state, action: PayloadAction<{ symbol: string }>) => {
-            const updated = state.filter(item => item.symbol !== action.payload.symbol);
+            const updated = state.coins.filter(item => item.symbol !== action.payload.symbol);
             console.log("Updated Watchlist:", updated);
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch {}
-            return updated;
+            state.coins = updated;
         },
 
         updateHolding: (state, action: PayloadAction<{ symbol: string, holding: string }>) => {
             const { symbol, holding } = action.payload;
-            const updated = state.map(item => {
+            const updated = state.coins.map(item => {
                 if (item.symbol === symbol) {
                     const holdingNum = parseFloat(holding) || 0;
                     const currentPrice = item.currentPrice || parseFloat(item.price.replace(/[$,]/g, '')) || 0;
@@ -44,12 +51,12 @@ export const WatchList = createSlice({
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch {}
-            return updated;
+            state.coins = updated;
         },
 
         updatePrices: (state, action: PayloadAction<CoinPriceData[]>) => {
             const priceData = action.payload;
-            const updated = state.map(item => {
+            const updated = state.coins.map(item => {
                 const priceInfo = priceData.find(p => p.symbol.toLowerCase() === item.symbol.toLowerCase());
                 if (priceInfo) {
                     const holdingNum = parseFloat(item.holding || '0') || 0;
@@ -73,10 +80,11 @@ export const WatchList = createSlice({
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch {}
-            return updated;
+            state.coins = updated;
+            state.lastUpdated = new Date();
         }
     }
 });
 
-export const { addToWatchList, removeFromWatchList, updateHolding, updatePrices } = WatchList.actions;
+export const { addToWatchList, removeFromWatchList, updateHolding, updatePrices, setLastUpdated } = WatchList.actions;
 export default WatchList.reducer;

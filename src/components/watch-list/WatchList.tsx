@@ -8,7 +8,7 @@ import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 import CoinModal from '../modals/CoinModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromWatchList, updateHolding, updatePrices } from '../../features/watchlist/watchlist-slice';
+import { removeFromWatchList, updateHolding, updatePrices, setLastUpdated } from '../../features/watchlist/watchlist-slice';
 import { getCoinGeckoIds, formatCurrency } from '../../utilities/watchlist';
 import { fetchCoinPrices } from '../../utilities/coingecko-api';
 import SparklineChart from '../sparkline-chart/SparklineChart';
@@ -17,7 +17,7 @@ import SparklineChart from '../sparkline-chart/SparklineChart';
 function WatchList() {
     const [showCoinModal, setShowCoinModal] = useState(false);
     const dispatch = useDispatch();
-    let coinsWatchlist = useSelector((state: any) => state.watchlist);
+    let coinsWatchlist = useSelector((state: any) => state.watchlist.coins);
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -57,6 +57,10 @@ function WatchList() {
         };
     }, [openDropdownIndex]);
 
+    useEffect(() => {
+        onRefresh();
+    }, []);
+
     const onRefresh = async () => {
         setIsLoading(true);
         try {
@@ -69,6 +73,7 @@ function WatchList() {
             
             // Update prices and recalculate values
             dispatch(updatePrices(priceData));
+            dispatch(setLastUpdated());
             
             // setCurrentPage(1);
         } catch (error) {

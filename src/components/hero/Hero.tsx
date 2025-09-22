@@ -8,7 +8,8 @@ import type { coinsForDoughnutChart } from "../../dto/coingecko-types"
 export default function Hero() {
 
   const [portfolioTotal, setPortfolioTotal] = useState<string>("$000");
-  let coinsWatchlist = useSelector((state: any) => state.watchlist);
+  let coinsWatchlist = useSelector((state: any) => state.watchlist.coins);
+  let lastUpdated = useSelector((state: any) => state.watchlist.lastUpdated);
 
 
   const computedCoins = (coinsWatchlist || []).map((coin: any, idx: number): coinsForDoughnutChart => {
@@ -41,7 +42,11 @@ export default function Hero() {
             <div className="cu-hero-title">Portfolio Total</div>
             <div className="cu-hero-value" title={portfolioTotal}>{portfolioTotal}</div>
           </div>
-          <span className="cu-hero-last-updated-time">Last updated: 3:42:12 PM</span>
+          {lastUpdated && (
+            <span className="cu-hero-last-updated-time">
+              Last updated: {lastUpdated.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true })}
+            </span>
+          )}
         </div>
         <div className="cu-hero-common-block cu-hero-graph-block">
           <div className="cu-hero-title">Portfolio Distribution</div>
