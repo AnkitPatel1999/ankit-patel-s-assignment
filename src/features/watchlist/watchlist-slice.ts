@@ -26,9 +26,19 @@ export const WatchList = createSlice({
                 localStorage.setItem('watchlist', JSON.stringify(updated));
             } catch {}
             return updated;
+        },
+        updateHolding: (state, action: PayloadAction<{ symbol: string, holding: string }>) => {
+            const { symbol, holding } = action.payload;
+            const updated = state.map(item =>
+                item.symbol === symbol ? { ...item, holding } : item
+            );
+            try {
+                localStorage.setItem('watchlist', JSON.stringify(updated));
+            } catch {}
+            return updated;
         }
     }
 });
 
-export const { addToWatchList, removeFromWatchList } = WatchList.actions;
+export const { addToWatchList, removeFromWatchList, updateHolding } = WatchList.actions;
 export default WatchList.reducer;

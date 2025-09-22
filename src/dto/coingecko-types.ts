@@ -26,5 +26,16 @@ export interface WatchListItem {
     price_change_percentage_24h: string,
     sparkline: string,
     total_volume: string,
-    total_volume_btc: string
+    total_volume_btc: string,
+    holding?: string,
+    value?: number
 }
+
+export interface coinsForDoughnutChart {
+    name: string;
+    short_form: string;
+    value: number;
+    color: string;
+    holding: number;
+    price: number;
+  };

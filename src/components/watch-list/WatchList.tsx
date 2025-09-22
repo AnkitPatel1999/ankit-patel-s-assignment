@@ -8,7 +8,7 @@ import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
 import CoinModal from '../modals/CoinModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeFromWatchList } from '../../features/watchlist/watchlist-slice';
+import { removeFromWatchList, updateHolding } from '../../features/watchlist/watchlist-slice';
 import { loadWatchlist } from '../../utilities/watchlist';
 
 
@@ -35,7 +35,7 @@ function WatchList() {
 
 
     const paginatedCoins = coinsWatchlist.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
+    console.log("paginatedCoins ", paginatedCoins)
 
     // Close dropdown on click outside for the open dropdown only
     useEffect(() => {
@@ -75,11 +75,10 @@ function WatchList() {
     const [holdingEdits, setHoldingEdits] = useState<{ [symbol: string]: string }>({});
     const [editingSymbol, setEditingSymbol] = useState<string | null>(null);
 
-    // Save holding value to Redux/localStorage (implement updateHolding action in your slice)
+    // store holding edits
     const saveHolding = (symbol: string) => {
         const value = holdingEdits[symbol];
-        // Dispatch updateHolding action (implement in your slice)
-        dispatch({ type: 'watchlist/updateHolding', payload: { symbol, holding: value } });
+        dispatch(updateHolding({ symbol, holding: value }))
         setEditingSymbol(null);
     };
 
@@ -168,10 +167,10 @@ function WatchList() {
                                 <div className='cu-watchlist-table-data-cell'><img className='cu-watchlist-sparkline-img' src={coin.sparkline} alt={coin.name} /></div>
                                 <div className='cu-watchlist-table-data-cell cu-watchlist-table-holding-cell '>
                                     {editingSymbol === coin.symbol ? (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div className='ae-d-flex ae-align-center ae-gap-8'>
                                             <input
                                                 type="number"
-                                                value={holdingEdits[coin.symbol] ?? coin.total_volume}
+                                                value={holdingEdits[coin.symbol] ?? coin.holding}
                                                 onChange={e => setHoldingEdits({ ...holdingEdits, [coin.symbol]: e.target.value })}
                                                 className="cu-holding-input"
                                                 placeholder='Select'
@@ -184,13 +183,10 @@ function WatchList() {
                                     ) : (
 
 
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-                                            onClick={() => {
-                                                setEditingSymbol(coin.symbol);
-                                                setHoldingEdits({ ...holdingEdits, [coin.symbol]: coin.total_volume });
-                                            }}
+                                        <div className='ae-d-flex ae-align-center ae-gap-8'
+                                            onClick={() => { setEditingSymbol(coin.symbol); }}
                                         >
-                                            <span>{coin.total_volume}</span>
+                                            <span>{coin.holding ? coin.holding : '0'}</span>
                                         </div>
                                     )}
                                 </div>
@@ -216,20 +212,14 @@ function WatchList() {
                                                 <button
                                                     className="cu-options-dropdown-item cu-options-edit"
                                                     tabIndex={0}
-                                                    onClick={e => {
-                                                        e.stopPropagation();
-                                                        setOpenDropdownIndex(null);
-                                                    }}
+                                                    onClick={e => { e.stopPropagation(); setEditingSymbol(coin.symbol); setOpenDropdownIndex(null); }}
                                                 >
                                                     <img src={pencil_square} alt='Edit Holdings' className="cu-options-edit-icon" />Edit Holdings
                                                 </button>
                                                 <button
                                                     className="cu-options-dropdown-item cu-options-remove"
                                                     tabIndex={0}
-                                                    onClick={e => {
-                                                        e.stopPropagation();
-                                                        removeWatchlist(coin.symbol);
-                                                    }}
+                                                    onClick={e => { e.stopPropagation(); removeWatchlist(coin.symbol); }}
                                                 >
                                                     <img src={trash} alt='Remove' className="cu-options-remove-icon" />Remove
                                                 </button>
