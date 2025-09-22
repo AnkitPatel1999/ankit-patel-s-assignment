@@ -202,6 +202,9 @@ body {
 .ae-justify-content-right {
   justify-content: right;
 }
+.ae-justify-content-center {
+  justify-content: center;
+}
 
 .ae-align-center {
   align-items: center;
