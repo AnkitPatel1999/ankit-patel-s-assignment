@@ -46,12 +46,10 @@ export interface coinsForDoughnutChart {
     id: string;
     symbol: string;
     name: string;
-    current_price: number;
-    price_change_percentage_24h: number;
-    sparkline_in_7d: {
-        price: number[];
-    };
-    total_volume: number;
+    current_price: string;
+    price_change_percentage_24h: string;
+    sparkline_in_7d: string;
+    total_volume: string;
     image: string;
 }
 

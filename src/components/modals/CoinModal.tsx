@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import './CoinModal.css';
 import { fetchTrendingCoins, searchCoins  } from '../../utilities/coingecko-api';
-import type {  TrendingResponse , SearchResponse} from '../../dto/coingecko-types';
+import type {  TrendingResponse , SearchResponse, CoinPriceData} from '../../dto/coingecko-types';
 import star from "./../../assets/star.svg";
 import { useDispatch } from 'react-redux';
 import { addToWatchList } from '../../features/watchlist/watchlist-slice';
@@ -27,7 +27,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [trendingCoins, setTrendingCoins] = useState<TrendingResponse | null>(null);
-    const [searchResults, setSearchResults] = useState<SearchResponse | null>(null);
+    const [searchResults, setSearchResults] = useState<CoinPriceData[] | null>(null);
     const [selectedCoinIds, setSelectedCoinIds] = useState<number[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isSearching, setIsSearching] = useState<boolean>(false);
@@ -37,7 +37,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
     // Debounced search function
     const debouncedSearch = useCallback(
         (() => {
-            let timeoutId: NodeJS.Timeout;
+            let timeoutId: number;
             return (query: string) => {
                 clearTimeout(timeoutId);
                 timeoutId = setTimeout(async () => {
@@ -48,7 +48,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                             setSearchResults(results);
                         } catch (err) {
                             console.error('Search failed:', err);
-                            setSearchResults({ coins: [] });
+                            setSearchResults([]);
                         } finally {
                             setIsSearching(false);
                         }
@@ -75,51 +75,52 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
             usedColors = watchlist.map((coin: any) => coin.chart_color || coin.chartColor).filter(Boolean);
         } catch {}
 
-        let selectedCoins: any[] = [];
+        const getNextColor = () => {
+            const color = chartColors.find(c => !usedColors.includes(c)) || chartColors[0];
+            usedColors.push(color);
+            return color;
+        };
 
-        // Handle trending coins
-        if (trendingCoins?.coins) {
-            const trendingSelected = trendingCoins.coins
-                .filter(coin => selectedCoinIds.includes(coin.item.coin_id))
-                .map(coin => {
-                    const chartColor = chartColors.find(c => !usedColors.includes(c)) || chartColors[0];
-                    usedColors.push(chartColor);
-                    return {
-                        small: coin.item.small,
-                        name: coin.item.name,
-                        symbol: coin.item.symbol,
-                        price: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price),
-                        price_change_percentage_24h: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.price_change_percentage_24h.aed),
-                        sparkline: coin.item.data.sparkline,
-                        total_volume: coin.item.data.total_volume,  
-                        total_volume_btc: new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(coin.item.data.total_volume_btc),
-                        chart_color: chartColor,
-                    };
-                });
-            selectedCoins = [...selectedCoins, ...trendingSelected];
-        }
+        const selectedCoins: any[] = [];
 
-        // Handle search results
-        if (searchResults?.coins) {
-            const searchSelected = searchResults.coins
-                .filter(coin => selectedCoinIds.includes(coin.market_cap_rank))
-                .map(coin => {
-                    const chartColor = chartColors.find(c => !usedColors.includes(c)) || chartColors[0];
-                    usedColors.push(chartColor);
-                    return {
-                        small: coin.thumb,
-                        name: coin.name,
-                        symbol: coin.symbol,
-                        price: '$0.00',
-                        price_change_percentage_24h: '0.00%',
-                        sparkline: '',
-                        total_volume: '0',
-                        total_volume_btc: '0.00',
-                        chart_color: chartColor,
-                    };
+        // Add trending coins
+        trendingCoins?.coins
+            ?.filter(coin => selectedCoinIds.includes(coin.item.coin_id))
+            ?.forEach(coin => {
+                const price = coin.item.data?.price || coin.item.price_btc || 0;
+                const priceChange = coin.item.data?.price_change_percentage_24h?.aed || 0;
+                const volume = coin.item.data?.total_volume || 0;
+                const volumeBtc = coin.item.data?.total_volume_btc || 0;
+                
+                selectedCoins.push({
+                    small: coin.item.small,
+                    name: coin.item.name,
+                    symbol: coin.item.symbol,
+                    price: `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
+                    price_change_percentage_24h: `${priceChange >= 0 ? '+' : ''}${priceChange.toFixed(2)}%`,
+                    sparkline: coin.item.data?.sparkline || '',
+                    total_volume: `$${volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                    total_volume_btc: volumeBtc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                    chart_color: getNextColor(),
                 });
-            selectedCoins = [...selectedCoins, ...searchSelected];
-        }
+            });
+
+        // Add search results
+        searchResults
+            ?.filter(coin => selectedCoinIds.includes(coin.market_cap_rank || 0))
+            ?.forEach(coin => {
+                selectedCoins.push({
+                    small: coin.image,
+                    name: coin.name,
+                    symbol: coin.symbol,
+                    price: `$${coin.current_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
+                    price_change_percentage_24h: `${coin.price_change_percentage_24h >= 0 ? '+' : ''}${coin.price_change_percentage_24h.toFixed(2)}%`,
+                    sparkline: `https://www.coingecko.com/coins/${coin.id}/sparkline.svg`,
+                    total_volume: `$${coin.total_volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                    total_volume_btc: '0.00',
+                    chart_color: getNextColor(),
+                });
+            });
 
         if (selectedCoins.length > 0) {
             watchlistDispatch(addToWatchList(selectedCoins));
@@ -178,7 +179,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                     {error && <p className="cu-modal-token-row cu-modal-pending-error-nodata-row">Error: {error}</p>}
                     
                     {/* No results states */}
-                    {!isLoading && !isSearching && !error && searchQuery && !searchResults?.coins?.length && (
+                    {!isLoading && !isSearching && !error && searchQuery && searchResults && !searchResults.length && (
                         <p className="cu-modal-token-row cu-modal-pending-error-nodata-row">No coins found for "{searchQuery}".</p>
                     )}
                     {!isLoading && !isSearching && !error && !searchQuery && !trendingCoins?.coins?.length && (
@@ -186,26 +187,21 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                     )}
 
                     {/* Search Results */}
-                    {searchResults?.coins?.map((coin) => {
-                        const isChecked = selectedCoinIds.includes(coin.market_cap_rank);
+                    {searchResults?.map((coin) => {
+                        const coinId = coin.market_cap_rank || 0;
+                        const isChecked = selectedCoinIds.includes(coinId);
                         
-                        const handleToggle = () => {
-                            setSelectedCoinIds((prev) =>
-                                isChecked
-                                    ? prev.filter(id => id !== coin.market_cap_rank)
-                                    : [...prev, coin.market_cap_rank]
-                            );
-                        };
-
                         return (
                             <div
                                 className={`cu-modal-token-row${isChecked ? ' checked' : ''}`}
                                 key={`search-${coin.id}`}
                                 style={{ cursor: 'pointer' }}
-                                onClick={handleToggle}
+                                onClick={() => setSelectedCoinIds(prev => 
+                                    isChecked ? prev.filter(id => id !== coinId) : [...prev, coinId]
+                                )}
                             >
                                 <img 
-                                    src={coin.thumb} 
+                                    src={coin.image} 
                                     alt={coin.name} 
                                     className="cu-modal-token-logo" 
                                     onError={(e) => {
@@ -219,8 +215,8 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                                     <input
                                         type="checkbox"
                                         className="cu-modal-checkbox-input"
-                                        name={`coin-id-${coin.market_cap_rank}`}
-                                        id={coin.market_cap_rank.toString()}
+                                        name={`coin-id-${coinId}`}
+                                        id={coinId.toString()}
                                         checked={isChecked}
                                         onChange={e => e.stopPropagation()}
                                         tabIndex={-1}
@@ -237,22 +233,17 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
 
                     {/* Trending Results (only show when not searching) */}
                     {!searchQuery && trendingCoins?.coins?.map((coin) => {
-                        const isChecked = selectedCoinIds.includes(coin.item.coin_id);
+                        const coinId = coin.item.coin_id;
+                        const isChecked = selectedCoinIds.includes(coinId);
                         
-                        const handleToggle = () => {
-                            setSelectedCoinIds((prev) =>
-                                isChecked
-                                    ? prev.filter(id => id !== coin.item.coin_id)
-                                    : [...prev, coin.item.coin_id]
-                            );
-                        };
-
                         return (
                             <div
                                 className={`cu-modal-token-row${isChecked ? ' checked' : ''}`}
-                                key={`trending-${coin.item.coin_id}`}
+                                key={`trending-${coinId}`}
                                 style={{ cursor: 'pointer' }}
-                                onClick={handleToggle}
+                                onClick={() => setSelectedCoinIds(prev => 
+                                    isChecked ? prev.filter(id => id !== coinId) : [...prev, coinId]
+                                )}
                             >
                                 <img 
                                     src={coin.item.small} 
@@ -269,8 +260,8 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
                                     <input
                                         type="checkbox"
                                         className="cu-modal-checkbox-input"
-                                        name={`coin-id-${coin.item.coin_id}`}
-                                        id={coin.item.coin_id.toString()}
+                                        name={`coin-id-${coinId}`}
+                                        id={coinId.toString()}
                                         checked={isChecked}
                                         onChange={e => e.stopPropagation()}
                                         tabIndex={-1}
