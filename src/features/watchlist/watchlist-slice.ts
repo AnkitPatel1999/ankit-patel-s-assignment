@@ -33,7 +33,7 @@ export const WatchList = createSlice({
             const updated = [...state.coins, ...newCoins];
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
-            } catch {}
+            } catch { }
             state.coins = updated;
         },
 
@@ -42,7 +42,7 @@ export const WatchList = createSlice({
             console.log("Updated Watchlist:", updated);
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
-            } catch {}
+            } catch { }
             state.coins = updated;
         },
 
@@ -59,7 +59,7 @@ export const WatchList = createSlice({
             });
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
-            } catch {}
+            } catch { }
             state.coins = updated;
         },
 
@@ -72,7 +72,7 @@ export const WatchList = createSlice({
                     const currentPrice = Number(priceInfo.current_price);
                     const value = holdingNum * currentPrice;
                     // Store sparkline data array for Chart.js
-                    const sparklineData = priceInfo.sparkline_in_7d?.price || item.sparklineData || [];
+                    const sparklineData = item.sparklineData || [];
                     return {
                         ...item,
                         price: `$${Number(currentPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
@@ -88,7 +88,7 @@ export const WatchList = createSlice({
             });
             try {
                 localStorage.setItem('watchlist', JSON.stringify(updated));
-            } catch {}
+            } catch { }
             state.coins = updated;
             state.lastUpdated = new Date();
         }

@@ -14,6 +14,29 @@ export interface TrendingCoin {
     };
 }
 
+export interface CoinItem {
+    id: string;
+    coin_id: number;
+    name: string;
+    symbol: string;
+    market_cap_rank: number;
+    thumb: string;
+    small: string;
+    large: string;
+    slug: string;
+    price_btc: number;
+    score: number;
+    data?: {
+        price?: number;
+        price_change_percentage_24h?: {
+            [key: string]: number;
+        };
+        total_volume?: number;
+        total_volume_btc?: number;
+        sparkline?: string;
+    };
+}
+
 export interface TrendingResponse {
     coins: TrendingCoin[];
 }
@@ -40,20 +63,22 @@ export interface coinsForDoughnutChart {
     color: string;
     holding: number;
     price: number;
-  };
+};
 
 
-  export interface CoinPriceData {
+export interface CoinPriceData {
     id: string;
     symbol: string;
     name: string;
-    current_price: string;
-    price_change_percentage_24h: string;
-    sparkline_in_7d: string;
-    total_volume: string;
+    current_price: number;
+    price_change_percentage_24h: number;
+    sparkline_in_7d: {
+        price: number[];
+    };
+    total_volume: number;
     image: string;
     market_cap_rank: number;
-  }
+}
 
 
 export interface SearchResult {

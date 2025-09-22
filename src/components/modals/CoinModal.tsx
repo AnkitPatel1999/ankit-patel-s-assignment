@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import './CoinModal.css';
 import { fetchTrendingCoins, searchCoins  } from '../../utilities/coingecko-api';
-import type {  TrendingResponse , SearchResponse, CoinPriceData} from '../../dto/coingecko-types';
+import type {  TrendingResponse , CoinPriceData, CoinItem} from '../../dto/coingecko-types';
 import star from "./../../assets/star.svg";
 import { useDispatch } from 'react-redux';
 import { addToWatchList } from '../../features/watchlist/watchlist-slice';
@@ -84,23 +84,32 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
         const selectedCoins: any[] = [];
 
         // Add trending coins
-        trendingCoins?.coins
+        (trendingCoins?.coins as { item: CoinItem }[])
             ?.filter(coin => selectedCoinIds.includes(coin.item.coin_id))
             ?.forEach(coin => {
-                const price = coin.item.data?.price || coin.item.price_btc || 0;
-                const priceChange = coin.item.data?.price_change_percentage_24h?.aed || 0;
-                const volume = coin.item.data?.total_volume || 0;
-                const volumeBtc = coin.item.data?.total_volume_btc || 0;
-                
+                const price = coin.item.data?.price ?? coin.item.price_btc ?? 0;
+                const priceChange = coin.item.data?.price_change_percentage_24h?.usd ?? 0;
+                const volume = coin.item.data?.total_volume ?? 0;
+                const volumeBtc = coin.item.data?.total_volume_btc ?? 0;
+
                 selectedCoins.push({
                     small: coin.item.small,
                     name: coin.item.name,
                     symbol: coin.item.symbol,
-                    price: `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 })}`,
-                    price_change_percentage_24h: `${priceChange >= 0 ? '+' : ''}${priceChange.toFixed(2)}%`,
-                    sparkline: coin.item.data?.sparkline || '',
-                    total_volume: `$${volume.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
-                    total_volume_btc: volumeBtc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+                    price: `$${price.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 6,
+                    })}`,
+                    price_change_percentage_24h: `${priceChange >= 0 ? "+" : ""}${priceChange.toFixed(2)}%`,
+                    sparkline: coin.item.data?.sparkline ?? "",
+                    total_volume: `$${volume.toLocaleString("en-US", {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0,
+                    })}`,
+                    total_volume_btc: volumeBtc.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }),
                     chart_color: getNextColor(),
                 });
             });
@@ -110,7 +119,7 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
             ?.filter(coin => selectedCoinIds.includes(coin.market_cap_rank || 0))
             ?.forEach(coin => {
                 // Store sparkline data for Chart.js
-                const sparklineData = coin.sparkline_in_7d?.price || [];
+                const sparklineData = coin.sparkline_in_7d?.price ?? [];
                 selectedCoins.push({
                     small: coin.image,
                     name: coin.name,
@@ -288,3 +297,4 @@ export default function CoinModal({ open, onClose }: CoinModalProps) {
         </>
     );
 }
+
