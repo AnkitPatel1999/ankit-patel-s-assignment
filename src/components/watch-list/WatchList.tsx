@@ -6,12 +6,13 @@ import ellipsis_horizontal from '../../assets/ellipsis_horizontal.svg';
 import trash from '../../assets/trash.svg';
 import pencil_square from '../../assets/pencil_square.svg';
 import './watchlist.css';
-import CoinModal from '../modals/CoinModal';
+import { lazy, Suspense } from 'react';
+const CoinModal = lazy(() => import('../modals/CoinModal'));
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromWatchList, updateHolding, updatePrices, setLastUpdated } from '../../features/watchlist/watchlist-slice';
 import { getCoinGeckoIds, formatCurrency } from '../../utilities/watchlist';
 import { fetchCoinPrices } from '../../utilities/coingecko-api';
-import SparklineChart from '../sparkline-chart/SparklineChart';
+const SparklineChart = lazy(() => import('../sparkline-chart/SparklineChart'));
 
 
 function WatchList() {
@@ -212,12 +213,14 @@ function WatchList() {
                                 <div className='cu-watchlist-table-data-cell ae-dark-fg-subtle-color cu-positive-change'>{coin.price_change_percentage_24h}</div>
                                 <div className='cu-watchlist-table-data-cell'>
                                     {coin.sparklineData && coin.sparklineData.length > 0 ? (
-                                        <SparklineChart 
-                                            data={coin.sparklineData} 
-                                            color={coin.price_change_percentage_24h?.includes('+') ? '#10B981' : '#EF4444'}
-                                            width={75}
-                                            height={28}
-                                        />
+                                        <Suspense fallback={<div className='cu-watchlist-sparkline-img' style={{width: '75px', height: '28px'}}></div>}>
+                                            <SparklineChart 
+                                                data={coin.sparklineData} 
+                                                color={coin.price_change_percentage_24h?.includes('+') ? '#10B981' : '#EF4444'}
+                                                width={75}
+                                                height={28}
+                                            />
+                                        </Suspense>
                                     ) : (
                                         <img className='cu-watchlist-sparkline-img' src={coin.sparkline} alt={coin.name} />
                                     )}
@@ -323,7 +326,9 @@ function WatchList() {
                 </div>
             </div>
             {/* Token Modal */}
-            <CoinModal open={showCoinModal} onClose={() => setShowCoinModal(false)} />
+            <Suspense fallback={<div>Loading...</div>}>
+                <CoinModal open={showCoinModal} onClose={() => setShowCoinModal(false)} />
+            </Suspense>
         </>
     );
 }

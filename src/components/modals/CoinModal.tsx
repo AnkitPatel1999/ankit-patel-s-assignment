@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import './CoinModal.css';
+import './coinmodal.css';
 import { fetchTrendingCoins, searchCoins  } from '../../utilities/coingecko-api';
 import type {  TrendingResponse , CoinPriceData, CoinItem} from '../../dto/coingecko-types';
 import star from "./../../assets/star.svg";
