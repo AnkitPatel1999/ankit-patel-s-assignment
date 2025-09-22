@@ -58,6 +58,7 @@
     padding: 0 0 0 0;
     max-height: 320px;
     overflow-y: auto;
+    height: 320px;
 }
 
 .cu-modal-trending {
@@ -211,3 +212,10 @@
 
 
 
+@media screen and (max-height: 500px) {
+
+    .cu-modal-list {
+        height: 100px;
+    }
+
+}

@@ -48,6 +48,7 @@ export default function Hero() {
             </span>
           )}
         </div>
+        {(computedCoins.length > 0) && (
         <div className="cu-hero-common-block cu-hero-graph-block">
           <div className="cu-hero-title">Portfolio Distribution</div>
           <div className="ae-d-flex ae-mt-20 cu-hero-graph-container">
@@ -70,6 +71,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
+        )}
       </div>
     </>
   )

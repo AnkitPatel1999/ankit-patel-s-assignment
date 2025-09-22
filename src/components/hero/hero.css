@@ -3,7 +3,8 @@
     border-radius: 12px;
     gap: 19px;
     background: var(--neutral-800-color);
-
+    min-height: 288px;
+    box-sizing: border-box;
 }
 
 .cu-hero-common-block {
