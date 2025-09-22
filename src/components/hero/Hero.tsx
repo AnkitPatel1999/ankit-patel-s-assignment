@@ -62,7 +62,11 @@ export default function Hero() {
                   <div className="ae-d-flex ae-align-center ae-gap-10">
                     <div className="cu-hero-token-name" style={{ color: token.color }}>{token.name} ({token.short_form})</div>
                   </div>
-                  <div className="cu-hero-token-percentage">${token.value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                  <div className="cu-hero-token-percentage">
+                    {totalOfPortfolio > 0
+                      ? ((token.value / totalOfPortfolio) * 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%"
+                      : "0.00%"}
+                  </div>
                 </div>
               ))}
             </div>
